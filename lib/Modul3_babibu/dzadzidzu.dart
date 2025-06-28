@@ -74,7 +74,7 @@ class _LearningDzaDziDzuWidgetState extends State<LearningDzaDziDzuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(dzadzidzuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

@@ -74,7 +74,7 @@ class _LearningSaSiSuWidgetState extends State<LearningSaSiSuWidget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(sasisuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

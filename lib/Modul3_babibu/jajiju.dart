@@ -74,7 +74,7 @@ class _LearningJaJiJuWidgetState extends State<LearningJaJiJuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(jajijuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

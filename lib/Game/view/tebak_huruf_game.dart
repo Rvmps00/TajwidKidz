@@ -50,6 +50,8 @@ class TebakHurufGame extends StatelessWidget {
                               MaterialPageRoute(builder: (_) => const TebakHurufGame()),
                             );
                           },
+                          gameName: 'tebak_huruf',
+                          level: 1,
                         ),
                       ),
                     );

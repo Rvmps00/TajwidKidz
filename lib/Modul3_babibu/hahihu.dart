@@ -74,7 +74,7 @@ class _LearningHaHiHuWidgetState extends State<LearningHaHiHuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(hahihuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

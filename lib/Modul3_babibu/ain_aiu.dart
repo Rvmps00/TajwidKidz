@@ -74,7 +74,7 @@ class _LearningAinAIUWidgetState extends State<LearningAinAIUWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(ainaiuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

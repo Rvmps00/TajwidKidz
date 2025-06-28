@@ -74,6 +74,8 @@ class _SusunHurufGame3State extends State<SusunHurufGame3> {
                                   score: controller.score,
                                   benar: controller.correctAnswers,
                                   totalQuestions: controller.questions.length,
+                                  gameName: 'Susun_Huruf', 
+                                  level: 3,
                                   onRetry: () {
                                     controller.resetGame();
                                     Navigator.pushReplacement(

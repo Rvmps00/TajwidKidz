@@ -74,7 +74,7 @@ class _LearningDhoDhiDhuWidgetState extends State<LearningDhoDhiDhuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(dhodhidhuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

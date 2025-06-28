@@ -84,6 +84,8 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                   onRetry: () {
                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const TebakHurufGame()));
                                   },
+                                  gameName: 'Tebak_Huruf', 
+                                  level: 1,
                                 ),
                               ),
                             );

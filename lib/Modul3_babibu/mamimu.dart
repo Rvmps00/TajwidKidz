@@ -74,7 +74,7 @@ class _LearningMaMiMuWidgetState extends State<LearningMaMiMuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(mamimuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

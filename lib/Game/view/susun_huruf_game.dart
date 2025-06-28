@@ -39,6 +39,8 @@ class SusunHurufGame extends StatelessWidget {
                           score: controller.score,
                           benar: controller.correctAnswers,
                           totalQuestions: controller.questions.length,
+                          gameName: 'Susun_Huruf', 
+                          level: 1,
                           onRetry: () {
                             controller.resetGame();
                             Navigator.pushReplacement(

@@ -73,7 +73,7 @@ class _LearningYaYiYuWidgetState extends State<LearningYaYiYuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(yayiyuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

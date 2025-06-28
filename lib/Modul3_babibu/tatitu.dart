@@ -73,7 +73,7 @@ class _LearningTaTituWidgetState extends State<LearningTaTituWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(tatituAudioModel.fileName);
+      await audioController.play();
     }
   }
 

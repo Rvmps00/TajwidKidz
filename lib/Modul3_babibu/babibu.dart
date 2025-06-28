@@ -74,7 +74,7 @@ class _LearningBaBiBuWidgetState extends State<LearningBaBiBuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(babibuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

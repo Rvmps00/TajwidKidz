@@ -72,6 +72,8 @@ class _GameTajwid2State extends State<GameTajwid2> {
                           controller.resetGame();
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const GameTajwid2()));
                         },
+                        gameName: 'Game_Tajwid', 
+                        level: 2,
                       ),
                     ),
                   );

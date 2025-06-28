@@ -74,7 +74,7 @@ class _LearningQoQiQuWidgetState extends State< LearningQoQiQuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(qaqiquAudioModel.fileName);
+      await audioController.play();
     }
   }
 

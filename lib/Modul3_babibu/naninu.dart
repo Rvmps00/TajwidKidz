@@ -74,7 +74,7 @@ class _LearningNaNiNuWidgetState extends State<LearningNaNiNuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(naninuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

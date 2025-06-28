@@ -238,6 +238,8 @@ class _GameTajwidState extends State<GameTajwid> {
                                                     MaterialPageRoute(builder: (_) => const GameTajwid()),
                                                   );
                                                 },
+                                                gameName: 'Game_Tajwid', 
+                                                level: 1,
                                               ),
                                             ),
                                           );

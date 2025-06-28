@@ -74,7 +74,7 @@ class _LearningRaRiRuWidgetState extends State<LearningRaRiRuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(rariruAudioModel.fileName);
+      await audioController.play();
     }
   }
 

@@ -74,7 +74,7 @@ class _LearningLaLiLuWidgetState extends State<LearningLaLiLuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(laliluAudioModel.fileName);
+      await audioController.play();
     }
   }
 

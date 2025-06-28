@@ -74,7 +74,7 @@ class _LearningWaWiWuWidgetState extends State<LearningWaWiWuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(wawiwuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

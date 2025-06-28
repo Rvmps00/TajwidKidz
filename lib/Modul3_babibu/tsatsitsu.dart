@@ -74,7 +74,7 @@ class _LearningTsaTsiTsuWidgetState extends State<LearningTsaTsiTsuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(tsatsitsuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

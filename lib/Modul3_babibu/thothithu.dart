@@ -74,7 +74,7 @@ class _LearningThoThiThuWidgetState extends State<LearningThoThiThuWidget>  {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(thothithuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

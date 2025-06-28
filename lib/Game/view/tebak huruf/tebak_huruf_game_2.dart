@@ -71,6 +71,8 @@ class _TebakHurufGame2State extends State<TebakHurufGame2> {
                               score: controller.score,
                               totalQuestions: controller.questions.length,
                               benar: controller.correctAnswers,
+                              gameName: 'Tebak_Huruf', 
+                              level: 2,                 
                               onRetry: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const TebakHurufGame2())),
                             ),
                             ),

@@ -74,7 +74,7 @@ class _LearningKhoKhiKhuWidgetState extends State<LearningKhoKhiKhuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(khokhikhuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

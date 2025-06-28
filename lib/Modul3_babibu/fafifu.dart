@@ -74,7 +74,7 @@ class _LearningFaFiFuWidgetState extends State<LearningFaFiFuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(fafifuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

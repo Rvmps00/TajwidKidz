@@ -74,7 +74,7 @@ class _LearningDaDiDuWidgetState extends State<LearningDaDiDuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(dadiduAudioModel.fileName);
+      await audioController.play();
     }
   }
 

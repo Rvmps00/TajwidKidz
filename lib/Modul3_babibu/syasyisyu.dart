@@ -74,7 +74,7 @@ class _LearningSyaSyiSyuWidgetState extends State<LearningSyaSyiSyuWidget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(syasyisyuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

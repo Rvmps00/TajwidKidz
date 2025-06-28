@@ -74,7 +74,7 @@ class _LearningKaKiKuWidgetState extends State<LearningKaKiKuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(kakikuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

@@ -217,6 +217,8 @@ class GameTajwid extends StatelessWidget {
                                                     MaterialPageRoute(builder: (_) => const GameTajwid()),
                                                   );
                                                 },
+                                                gameName: 'Game_Tajwid', 
+                                                level: 1,
                                               ),
                                             ),
                                           );

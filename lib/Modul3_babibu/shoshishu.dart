@@ -74,7 +74,7 @@ class _LearningShoShiShuWidgetState extends State<LearningShoShiShuWidget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(shoshishuAudioModel.fileName);
+      await audioController.play();
     }
   }
 

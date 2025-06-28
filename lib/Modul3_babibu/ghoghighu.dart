@@ -74,7 +74,7 @@ class _LearningGhoGhiGhuWidgetState extends State<LearningGhoGhiGhuWidget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(ghoghighuAudioModel.fileName);
+      await audioController.play();
     }
   }
 
