@@ -222,44 +222,76 @@ class _LearningAlfalaq1WidgetState extends State<LearningAlfalaq1Widget> {
                   const SizedBox(height: 20),
 
                   Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        isRecording ? Icons.stop : Icons.mic_sharp,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      onPressed: () async {
-                        if (!isRecording) {
-                          final recorded = await _recordController.startRecording();
-                          if (recorded != null) {
-                            setState(() {
-                              currentAudio = recorded;
-                              isRecording = true;
-                            });
-                          }
-                        } else if (currentAudio != null) {
-                          final url = await _recordController.stopAndUpload(currentAudio!, folderPath: 'recordings/Module5/Al-Falaq');
-                          if (url != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Uploaded! Link: $url')),
-                          );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Upload failed')),
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          isRecording ? Icons.stop : Icons.mic_sharp,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                        onPressed: () async {
+                          if (!isRecording) {
+                            final recorded = await _recordController.startRecording();
+                            if (recorded != null) {
+                              setState(() {
+                                currentAudio = recorded;
+                                isRecording = true;
+                                _textController1.text = ''; // reset feedback
+                              });
+                            }
+                          } else if (currentAudio != null) {
+                            final url = await _recordController.stopAndUpload(
+                              currentAudio!,
+                              folderPath: 'recordings/Module5/Al-Ghunnah',
                             );
+
+                            setState(() => isRecording = false);
+
+                            if (url != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Uploaded!')),
+                              );
+
+                              // ⏳ Tampilkan loading sementara
+                              setState(() {
+                                _textController1.text = '⏳ Menilai bacaan kamu...';
+                              });
+
+                              // Evaluasi langsung
+                              final fullPath = 'recordings/Module5/Al-Ghunnah/${currentAudio!.fileName}';
+                              final result = await _evaluationController.evaluateFromFirebasePath(fullPath);
+
+                              if (result != null) {
+                                final expectedRules = ['Ghunnah']; // ✅ sesuaikan per ayat
+                                final scores = {
+                                  'Mad': result.mad,
+                                  'Ghunnah': result.ghunnah,
+                                  'Ikhfaa': result.ikhfa,
+                                };
+                                final feedback = getRandomFeedback(expectedRules, scores);
+                                setState(() {
+                                  _textController1.text = feedback.trim();
+                                });
+                              } else {
+                                setState(() {
+                                  _textController1.text = '❌ Evaluasi gagal.';
+                                });
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('❌ Upload failed')),
+                              );
+                            }
                           }
-                          setState(() => isRecording = false);
-                        }
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Coba Ucapkan Huruf \nHijaiyah!',
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
-                  ],
-                ),
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Coba Ucapkan Huruf \nHijaiyah!',
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
+                    ],
+                  ),
 
                   const SizedBox(height: 15),
 
@@ -279,7 +311,7 @@ class _LearningAlfalaq1WidgetState extends State<LearningAlfalaq1Widget> {
                         autofocus: false,
                         obscureText: false,
                         readOnly: true,
-                        maxLines: null, // ← membuatnya fleksibel tinggi
+                        maxLines: null,
                         decoration: InputDecoration(
                           hintText: '...............',
                           filled: true,
@@ -289,38 +321,6 @@ class _LearningAlfalaq1WidgetState extends State<LearningAlfalaq1Widget> {
                           ),
                           isDense: true,
                           contentPadding: const EdgeInsets.all(12),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.refresh, color: Colors.black),
-                            onPressed: () async {
-                              if (currentAudio == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Belum ada audio untuk dievaluasi')),
-                                );
-                                return;
-                              }
-
-                              final fullPath = 'recordings/Module5/Al-Falaq/${currentAudio!.fileName}';
-                              final result = await _evaluationController.evaluateFromFirebasePath(fullPath);
-
-                              if (result != null) {
-                                  // Expected tajwid rules in this ayat
-                                  final expectedRules = ['Ghunnah']; // ubah sesuai ayat
-                                  final scores = {
-                                    'Mad': result.mad,
-                                    'Ghunnah': result.ghunnah,
-                                    'Ikhfaa': result.ikhfa,
-                                  };
-                                final feedback = getRandomFeedback(expectedRules, scores);
-                                setState(() {
-                                  _textController1.text = feedback.trim();
-                                });
-                                } else {
-                                  setState(() {
-                                    _textController1.text = 'Evaluasi gagal.';
-                                });
-                              }
-                            },
-                          ),
                         ),
                         style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16),
                         cursorColor: Colors.black,

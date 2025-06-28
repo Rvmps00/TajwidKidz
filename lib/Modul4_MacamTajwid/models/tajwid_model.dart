@@ -4,8 +4,10 @@ class TajwidModel {
   final String otherTitle;
   final String influentialLetter;
   final String howToRead;
-  final List<List<String>> exampleWord; // Ubah menjadi List of List
-  final List<List<String>> exampleImage; // Ubah menjadi List of List
+  final List<List<String>> exampleWord;
+  final List<List<String>> exampleImage;
+
+  final List<String> exampleAudio;// Ganti jadi hanya 1 file audio per tajwid
 
   TajwidModel({
     required this.number,
@@ -15,5 +17,6 @@ class TajwidModel {
     required this.howToRead,
     required this.exampleWord,
     required this.exampleImage,
+    required this.exampleAudio,
   });
 }

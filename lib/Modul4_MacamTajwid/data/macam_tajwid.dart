@@ -13,6 +13,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_izhar_1.png', 'assets/images/contoh_izhar_2.png', 'assets/images/contoh_izhar_3.png']
     ],
+    exampleAudio: ['Modul4/Izhar Halqi.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "2",
@@ -27,6 +28,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_idgham_bighunnah_1.png', 'assets/images/contoh_idgham_bighunnah_2.png', 'assets/images/contoh_idgham_bighunnah_3.png']
     ],
+    exampleAudio: ['Modul4/Idgham Bigunnah.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "3",
@@ -41,6 +43,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_idgham_bilaghunnah_1.png', 'assets/images/contoh_idgham_bilaghunnah_2.png', 'assets/images/contoh_idgham_bilaghunnah_3.png']
     ],
+    exampleAudio: ['Modul4/Idgham Bilaghunnah.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "4",
@@ -55,6 +58,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_ikhfa_haqiqi_1.png', 'assets/images/contoh_ikhfa_haqiqi_2.png', 'assets/images/contoh_ikhfa_haqiqi_3.png']
     ],
+    exampleAudio: ['Modul4/Ikhfa Haqiqi.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "5",
@@ -70,6 +74,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_iqlab_1.png', 'assets/images/contoh_iqlab_2.png', 'assets/images/contoh_iqlab_3.png']
     ],
+    exampleAudio: ['Modul4/Iqlab .wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "6",
@@ -84,6 +89,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_ikhfa_syafawi_1.png', 'assets/images/contoh_ikhfa_syafawi_2.png', 'assets/images/contoh_ikhfa_syafawi_3.png']
     ],
+    exampleAudio: ['Modul4/Ikhfa Syafawi.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "7",
@@ -98,6 +104,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_idhgam_mini_1.png', 'assets/images/contoh_idhgam_mini_2.png', 'assets/images/contoh_idhgam_mini_3.png']
     ],
+    exampleAudio: ['Modul4/Idgham Mimi .wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "8",
@@ -112,6 +119,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_izhar_syafawi_1.png', 'assets/images/contoh_izhar_syafawi_2.png', 'assets/images/contoh_izhar_syafawi_3.png']
     ],
+    exampleAudio: ['Modul4/Izhar Syafawi.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "9",
@@ -126,6 +134,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_mad_thobii_1.png', 'assets/images/contoh_mad_thobii_2.png', 'assets/images/contoh_mad_thobii_3.png']
     ],
+    exampleAudio: ['Modul4/Mad Thabii.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "10",
@@ -140,6 +149,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_mad_wajib_mutt_1.png', 'assets/images/contoh_mad_wajib_mutt_2.png', 'assets/images/contoh_mad_wajib_mutt_3.png']
     ],
+    exampleAudio: ['Modul4/Mad Wajib Muttasil.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "11",
@@ -154,6 +164,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_mad_jaiz_1.png', 'assets/images/contoh_mad_jaiz_2.png', 'assets/images/contoh_mad_jaiz_3.png']
     ],
+    exampleAudio: ['Modul4/Mad Jaiz Munfasil.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "12",
@@ -169,6 +180,7 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_mad_lazim_1.png', 'assets/images/contoh_mad_lazim_2.png', 'assets/images/contoh_mad_lazim_3.png']
     ],
+    exampleAudio: ['Modul4/Mad Lazim Kalimi Muthaqqal.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "13",
@@ -188,6 +200,7 @@ final List<TajwidModel> susunHurufQuestions = [
       [''], // Kosong untuk sub-judul
       ['assets/images/contoh_qalqalah_kubra_1.png', 'assets/images/contoh_qalqalah_kubra_2.png', 'assets/images/contoh_qalqalah_kubra_3.png'],
     ],
+    exampleAudio: ['Modul4/Qalqalah Sughra.wav', 'Modul4/Qalqalah Qubra .wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "14",
@@ -207,6 +220,7 @@ final List<TajwidModel> susunHurufQuestions = [
       [''], // Kosong untuk sub-judul
       ['assets/images/contoh_tarqiq_1.png', 'assets/images/contoh_tarqiq_2.png', 'assets/images/contoh_tarqiq_3.png']
     ],
+    exampleAudio: ['Modul4/Hukum Tafkhim Pada Huruf Ra.wav', 'Modul4/Hukum Tarqiq Pada Huruf Ro.wav'], // Ganti dengan file audio yang sesuai
   ),
   TajwidModel(
     number: "15",
@@ -221,5 +235,6 @@ final List<TajwidModel> susunHurufQuestions = [
     exampleImage: [
       ['assets/images/contoh_alif_lam_qomariyah_1.png', 'assets/images/contoh_alif_lam_qomariyah_2.png', 'assets/images/contoh_alif_lam_qomariyah_3.png']
     ],
+    exampleAudio: ['Modul4/Alif Lam Qamariyah.wav'], // Ganti dengan file audio yang sesuai
   ),
 ];
