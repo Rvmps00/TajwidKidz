@@ -35,18 +35,24 @@ class _LearningAlkafirun5WidgetState extends State<LearningAlkafirun5Widget > {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    kafirun5AudioModel = AudioModel(label: 'Kafirun5', fileName: 'Modul5/Al-Kafirun/Ayat 5.wav');
-    audioController = AudioController();
+  kafirun5AudioModel = AudioModel(
+    label: 'Kafirun5',
+    fileName: 'Modul5/Al-Kafirun/Ayat 5.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(kafirun5AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAlkafirun5WidgetState extends State<LearningAlkafirun5Widget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(kafirun5AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -142,7 +148,7 @@ class _LearningAlkafirun5WidgetState extends State<LearningAlkafirun5Widget > {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

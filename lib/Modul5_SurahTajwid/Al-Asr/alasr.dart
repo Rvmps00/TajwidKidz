@@ -166,7 +166,7 @@ class _LearningAlasrfullWidgetState extends State<LearningAlasrfullWidget> {
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                     ),
                     IconButton(

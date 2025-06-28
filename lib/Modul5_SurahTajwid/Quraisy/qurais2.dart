@@ -35,18 +35,24 @@ class _LearningQurais2WidgetState extends State<LearningQurais2Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    qurais2AudioModel = AudioModel(label: 'Qurais2', fileName: 'Modul5/Al-Quraisy/Ayat 2.wav');
-    audioController = AudioController();
+  qurais2AudioModel = AudioModel(
+    label: 'Quraisy2',
+    fileName: 'Modul5/Al-Quraisy/Ayat 2.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(qurais2AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningQurais2WidgetState extends State<LearningQurais2Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(qurais2AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -141,7 +147,7 @@ class _LearningQurais2WidgetState extends State<LearningQurais2Widget> {
             style: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
-                color: Colors.black),
+                color: Colors.white), // Changed to white for better contrast
             textAlign: TextAlign.center,
           ),
           centerTitle: true,

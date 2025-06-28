@@ -35,18 +35,24 @@ class _LearningAnnas5WidgetState extends State<LearningAnnas5Widget > {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    annas5AudioModel = AudioModel(label: 'Annas5', fileName: 'Modul5/An-Nas/Ayat 5.wav');
-    audioController = AudioController();
+  annas5AudioModel = AudioModel(
+    label: 'Nas5',
+    fileName: 'Modul5/An-Nas/Ayat 5.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(annas5AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAnnas5WidgetState extends State<LearningAnnas5Widget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(annas5AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -142,7 +148,7 @@ class _LearningAnnas5WidgetState extends State<LearningAnnas5Widget > {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

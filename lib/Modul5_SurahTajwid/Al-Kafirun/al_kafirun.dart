@@ -230,7 +230,7 @@ class _LearningAlKafirunFullWidgetState
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: 20,
-                          color: Colors.black,
+                          color: Colors.white, // Changed to white for better contrast
                         ),
                       ),
                     ),

@@ -34,18 +34,24 @@ class _LearningAlasr3WidgetState extends State<LearningAlasr3Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    alasr3AudioModel = AudioModel(label: 'Alasr3', fileName: 'Modul5/Al-Asr/Ayat 1.wav');
-    audioController = AudioController();
+  alasr3AudioModel = AudioModel(
+    label: 'Alasr3',
+    fileName: 'Modul5/Al-Asr/Ayat 3.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(alasr3AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -80,7 +86,7 @@ class _LearningAlasr3WidgetState extends State<LearningAlasr3Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(alasr3AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -136,7 +142,7 @@ class _LearningAlasr3WidgetState extends State<LearningAlasr3Widget> {
           ),
           title: Text(
             'Level 5 : Belajar Membaca\nSurah dengan Tajwid',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
+            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
             textAlign: TextAlign.center,
           ),
           centerTitle: true,

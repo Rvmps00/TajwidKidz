@@ -35,18 +35,24 @@ class _LearningAlfatihah3WidgetState extends State<LearningAlfatihah3Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    alfa3AudioModel = AudioModel(label: 'Alfa3', fileName: 'Modul5/Al-Fatihah/Ayat 3.wav');
-    audioController = AudioController();
+  alfa3AudioModel = AudioModel(
+    label: 'Alfa3',
+    fileName: 'Modul5/Al-Fatihah/Ayat 3.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(alfa3AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAlfatihah3WidgetState extends State<LearningAlfatihah3Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(alfa3AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -141,7 +147,7 @@ class _LearningAlfatihah3WidgetState extends State<LearningAlfatihah3Widget> {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white,
             ),
             textAlign: TextAlign.center,
           ),

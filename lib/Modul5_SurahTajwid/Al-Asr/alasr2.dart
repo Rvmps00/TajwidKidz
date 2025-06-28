@@ -34,18 +34,61 @@ class _LearningAlasr2WidgetState extends State<LearningAlasr2Widget> {
   bool _isPlaying = false;
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    alasr2AudioModel = AudioModel(label: 'Alasr2', fileName: 'Modul5/Al-Asr/Ayat 2.wav');
-    audioController = AudioController();
+  alasr2AudioModel = AudioModel(
+    label: 'Alasr2',
+    fileName: 'Modul5/Al-Asr/Ayat 2.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(alasr2AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
+  });
+}
+
+  @override
+  void dispose() {
+    _textController1.dispose();
+    _textFieldFocusNode1.dispose();
+    // Dispose audioController here if needed
+    super.dispose();
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        // current screen
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/progress');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/account');
+        break;
+    }
+  }
+
+  void _playPauseAudio() async {
+    if (_isPlaying) {
+      await audioController.pause();
+    } else {
+      await audioController.play(); // ✅ Jangan ulang set source
+    }
   }
 
   final List<String> lowFeedbacks = [
@@ -81,43 +124,6 @@ class _LearningAlasr2WidgetState extends State<LearningAlasr2Widget> {
   }
 
   @override
-  void dispose() {
-    _textController1.dispose();
-    _textFieldFocusNode1.dispose();
-    // Dispose audioController here if needed
-    super.dispose();
-  }
-
-  void onTabTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        // current screen
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/progress');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/account');
-        break;
-    }
-  }
-
-  void _playPauseAudio() async {
-    if (_isPlaying) {
-      await audioController.pause();
-    } else {
-      await audioController.play(alasr2AudioModel.fileName);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
@@ -137,7 +143,7 @@ class _LearningAlasr2WidgetState extends State<LearningAlasr2Widget> {
           ),
           title: Text(
             'Level 5 : Belajar Membaca\nSurah dengan Tajwid',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
+            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
             textAlign: TextAlign.center,
           ),
           centerTitle: true,

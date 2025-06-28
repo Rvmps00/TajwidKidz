@@ -35,18 +35,24 @@ class _LearningAnnas3WidgetState extends State<LearningAnnas3Widget > {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    annas3AudioModel = AudioModel(label: 'Annas3', fileName: 'Modul5/An-Nas/Ayat 3.wav');
-    audioController = AudioController();
+  annas3AudioModel = AudioModel(
+    label: 'Nas3',
+    fileName: 'Modul5/An-Nas/Ayat 3.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(annas3AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAnnas3WidgetState extends State<LearningAnnas3Widget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(annas3AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -142,7 +148,7 @@ class _LearningAnnas3WidgetState extends State<LearningAnnas3Widget > {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

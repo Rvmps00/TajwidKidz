@@ -7,6 +7,8 @@ import 'Modul2harakat/m2fathah.dart';
 import 'Modul3_babibu/Fonetik Babibu/aiu.dart';
 import 'Modul6gharib/gharib.dart';
 import 'modul7huruftajwid/huruftajwid.dart';
+import 'controller/progress_controller.dart';
+
 
 // Halaman Level 1
 class Level1Page extends StatelessWidget {
@@ -139,16 +141,30 @@ class LearningWidget extends StatefulWidget {
 
 class _LearningWidgetState extends State<LearningWidget> {
   int selectedIndex = 1;
-
-  // Variabel state untuk menyimpan status penyelesaian setiap level
   final List<bool> _levelCompleted = List.generate(7, (_) => false);
+  final ProgressController _progressController = ProgressController();
 
-  // Fungsi untuk menangani perubahan pada checkbox
-  void _onCheckboxChanged(bool? newValue, int levelIndex) {
+  @override
+  void initState() {
+    super.initState();
+    _loadProgress();
+  }
+
+  void _loadProgress() async {
+    List<bool> progress = await _progressController.getProgress();
     setState(() {
-      // Level 1-7, sedangkan indeks list 0-6
-      _levelCompleted[levelIndex - 1] = newValue ?? false;
+      for (int i = 0; i < progress.length; i++) {
+        _levelCompleted[i] = progress[i];
+      }
     });
+  }
+
+  void _onCheckboxChanged(bool? newValue, int levelIndex) {
+    if (newValue == null) return;
+    setState(() {
+      _levelCompleted[levelIndex - 1] = newValue;
+    });
+    _progressController.updateProgress(levelIndex, newValue);
   }
 
   void onTabTapped(int index) {

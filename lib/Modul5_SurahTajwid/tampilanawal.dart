@@ -81,7 +81,7 @@ class _LearningtampilanSplashWidgetState
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
-                                color: Colors.black,
+                                color: const Color.fromARGB(255, 255, 255, 255),
                               ),
                             ),
                           ),

@@ -34,18 +34,24 @@ class _LearningAlikhlas4WidgetState extends State<LearningAlikhlas4Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    ikhlas4AudioModel = AudioModel(label: 'Ikhlas4', fileName: 'Modul5/Al-Ikhlas/Ayat 4.wav');
-    audioController = AudioController();
+  ikhlas4AudioModel = AudioModel(
+    label: 'Ikhlas4',
+    fileName: 'Modul5/Al-Ikhlas/Ayat 4.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(ikhlas4AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -80,7 +86,7 @@ class _LearningAlikhlas4WidgetState extends State<LearningAlikhlas4Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(ikhlas4AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -141,7 +147,7 @@ class _LearningAlikhlas4WidgetState extends State<LearningAlikhlas4Widget> {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

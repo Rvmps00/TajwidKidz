@@ -35,18 +35,24 @@ class _LearningAlfalaq4WidgetState extends State<LearningAlfalaq4Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    falaq4AudioModel = AudioModel(label: 'Falaq4', fileName: 'Modul5/Al-Falaq/Ayat 4.wav');
-    audioController = AudioController();
+  falaq4AudioModel = AudioModel(
+    label: 'Falaq4',
+    fileName: 'Modul5/Al-Falaq/Ayat 4.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(falaq4AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAlfalaq4WidgetState extends State<LearningAlfalaq4Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(falaq4AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -142,7 +148,7 @@ class _LearningAlfalaq4WidgetState extends State<LearningAlfalaq4Widget> {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

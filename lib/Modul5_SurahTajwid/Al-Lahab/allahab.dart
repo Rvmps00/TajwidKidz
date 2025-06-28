@@ -229,7 +229,7 @@ class _LearningAlLahabFullWidgetState extends State<LearningAlLahabFullWidget> {
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                     ),
                     IconButton(

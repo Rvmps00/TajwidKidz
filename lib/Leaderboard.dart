@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:TajwidKidz/Game/view/mini_game.dart'; // Sesuaikan path ini
-import 'homepage.dart'; // Import HomePageWidget, sesuaikan pathnya
+import 'package:TajwidKidz/Game/view/mini_game.dart';
+import 'homepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const LeaderboardApp());
@@ -35,19 +36,7 @@ class LeaderboardScreen extends StatefulWidget {
 
 class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
-  final List<Player> players = [
-    Player(rank: 1, name: 'Haley James', xp: 500),
-    Player(rank: 2, name: 'Brooke Davis', xp: 480),
-    Player(rank: 3, name: 'Jamie Scott', xp: 470),
-    Player(rank: 4, name: 'Marvin McFadden', xp: 460),
-    Player(rank: 5, name: 'Nathan Scott', xp: 450),
-    Player(rank: 6, name: 'Antwon Taylor', xp: 440),
-    Player(rank: 7, name: 'Jake Jagielski', xp: 430),
-    Player(rank: 8, name: 'Peyton Sawyer', xp: 420),
-    Player(rank: 9, name: 'Lucas Scott', xp: 410),
-    Player(rank: 10, name: 'Karen Roe', xp: 400),
-  ];
-
+  final List<Player> players = [];
   late AnimationController _animationController;
   late Animation<double> _fadeInAnimation;
   late ScrollController _scrollController;
@@ -55,18 +44,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-
     _scrollController = ScrollController();
-
     _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-
+      vsync: this, duration: const Duration(milliseconds: 800));
     _fadeInAnimation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
-
     _animationController.forward();
+    _loadLeaderboard();
   }
 
   @override
@@ -78,89 +62,92 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   Widget _buildMedal(int rank) {
     switch (rank) {
-      case 1:
-        return Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFFD700), Color(0xFFFFA500)], // Emas ke oranye
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: const [
-              BoxShadow(color: Color(0xFFFFD700), blurRadius: 12, spreadRadius: 2),
-            ],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: const Icon(Icons.emoji_events, color: Colors.black, size: 40),
-        );
-      case 2:
-        return Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Colors.grey.shade400, Colors.grey.shade600], // Silver gradient
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(color: Colors.grey.shade500, blurRadius: 10, spreadRadius: 1),
-            ],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: const Icon(Icons.emoji_events, color: Colors.black, size: 36),
-        );
-      case 3:
-        return Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Colors.brown.shade300, Colors.brown.shade600], // Bronze gradient
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(color: Colors.brown.shade600, blurRadius: 10, spreadRadius: 1),
-            ],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: const Icon(Icons.emoji_events, color: Colors.white, size: 36),
-        );
-      default:
-        return CircleAvatar(
-          backgroundColor: Colors.blueGrey.shade100,
-          child: Text(
-            rank.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        );
+      case 1: return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+            begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: const [BoxShadow(color: Color(0xFFFFD700), blurRadius: 12, spreadRadius: 2)],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: const Icon(Icons.emoji_events, color: Colors.black, size: 40),
+      );
+      case 2: return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [Colors.grey.shade400, Colors.grey.shade600],
+            begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: [BoxShadow(color: Colors.grey.shade500, blurRadius: 10, spreadRadius: 1)],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: const Icon(Icons.emoji_events, color: Colors.black, size: 36),
+      );
+      case 3: return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [Colors.brown.shade300, Colors.brown.shade600],
+            begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: [BoxShadow(color: Colors.brown.shade600, blurRadius: 10, spreadRadius: 1)],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: const Icon(Icons.emoji_events, color: Colors.white, size: 36),
+      );
+      default: return CircleAvatar(
+        backgroundColor: Colors.blueGrey.shade100,
+        child: Text('$rank', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      );
     }
+  }
+
+  Future<void> _loadLeaderboard() async {
+    final snapshot = await FirebaseFirestore.instance.collection('users').get();
+    List<Map<String, dynamic>> temp = [];
+
+    for (var doc in snapshot.docs) {
+      final d = doc.data();
+      final name = d['fullName'] ?? 'Tidak dikenal';
+      final games = d['games'] as Map<String, dynamic>? ?? {};
+      int scoreSum = 0;
+
+      for (var key in ['Tebak_Huruf', 'Susun_Huruf', 'Game_Tajwid']) {
+        final gm = games[key] as Map<String, dynamic>? ?? {};
+        for (var lvl in gm.values) {
+          if (lvl is Map && lvl.containsKey('score')) {
+            scoreSum += (lvl['score'] as num).toInt();
+          }
+        }
+      }
+      temp.add({'name': name, 'score': scoreSum});
+    }
+
+    temp.sort((a, b) => b['score'].compareTo(a['score']));
+    for (var i = 0; i < temp.length; i++) {
+      players.add(Player(rank: i + 1, name: temp[i]['name'], xp: temp[i]['score']));
+    }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAD2), // Kuning pucat
+      backgroundColor: const Color(0xFFFAFAD2),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF037A16), // Hijau gelap
+        backgroundColor: const Color(0xFF037A16),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black), // Ikon putih agar kontras
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePageWidget()),
-                  (route) => false,
-            );
-          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePageWidget()),
+            (route) => false,
+          ),
         ),
         title: const Text(
           'Leaderboard',
-          style: TextStyle(
-            color: Colors.black, // Teks putih agar jelas
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
       ),
@@ -171,55 +158,49 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      _buildMedal(2),
-                      const SizedBox(height: 6),
-                      const Text('2',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, color: Colors.black)),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      _buildMedal(1),
-                      const SizedBox(height: 6),
-                      const Text('1',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, color: Colors.black)),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      _buildMedal(3),
-                      const SizedBox(height: 6),
-                      const Text('3',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, color: Colors.black)),
-                    ],
-                  ),
-                ],
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        _buildMedal(2),
+                        const SizedBox(height: 6),
+                        const Text('2',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, color: Colors.black)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _buildMedal(1),
+                        const SizedBox(height: 6),
+                        const Text('1',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, color: Colors.black)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        _buildMedal(3),
+                        const SizedBox(height: 6),
+                        const Text('3',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, color: Colors.black)),
+                      ],
+                    ),
+                  ],
+                ),
               const SizedBox(height: 16),
               const Text(
                 'Selamat Atas Pencampainmu',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
               ),
               const SizedBox(height: 4),
               const Text(
                 '10 Peringkat Terbaik Mini Game',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
               const SizedBox(height: 24),
+
               Expanded(
                 child: Scrollbar(
                   controller: _scrollController,
@@ -234,68 +215,56 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       endIndent: 20,
                     ),
                     itemBuilder: (context, index) {
-                      final player = players[index];
+                      final p = players[index];
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                         decoration: BoxDecoration(
-                          color: player.rank == 1
+                          color: p.rank == 1
                               ? Colors.amber.shade100.withAlpha(120)
-                              : player.rank == 2
-                              ? Colors.grey.shade300.withAlpha(120)
-                              : player.rank == 3
-                              ? Colors.brown.shade200.withAlpha(120)
-                              : Colors.transparent,
+                              : p.rank == 2
+                                  ? Colors.grey.shade300.withAlpha(120)
+                                  : p.rank == 3
+                                      ? Colors.brown.shade200.withAlpha(120)
+                                      : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 4),
                         child: ListTile(
-                          leading: _buildMedal(player.rank),
+                          leading: _buildMedal(p.rank),
                           title: Text(
-                            player.name,
+                            p.name,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: player.rank <= 3
-                                  ? Colors.black87
-                                  : Colors.black,
+                              color: p.rank <= 3 ? Colors.black87 : Colors.black,
                             ),
                           ),
-                          trailing: Text(
-                            '${player.xp} XP',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.green,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
+                          trailing: Text('${p.xp} XP',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.green)),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         ),
                       );
                     },
                   ),
                 ),
               ),
+
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MiniGameWidget()),
-                  );
-                },
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MiniGameWidget()),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   elevation: 5,
                 ),
-                child: const Text(
-                  'Next Game',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: const Text('Next Game', style: TextStyle(fontSize: 18)),
               ),
               const SizedBox(height: 16),
             ],

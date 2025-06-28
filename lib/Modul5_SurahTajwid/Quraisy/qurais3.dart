@@ -35,18 +35,24 @@ class _LearningQurais1WidgetState extends State<LearningQurais3Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    qurais3AudioModel = AudioModel(label: 'Qurais3', fileName: 'Modul5/Al-Quraisy/Ayat 3.wav');
-    audioController = AudioController();
+  qurais3AudioModel = AudioModel(
+    label: 'Quraisy3',
+    fileName: 'Modul5/Al-Quraisy/Ayat 3.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(qurais3AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningQurais1WidgetState extends State<LearningQurais3Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(qurais3AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -137,7 +143,7 @@ class _LearningQurais1WidgetState extends State<LearningQurais3Widget> {
           ),
           title: Text(
             'Level 5 : Belajar Membaca\nSurah dengan Tajwid',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
+            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white), // Changed to white for better contrast
             textAlign: TextAlign.center,
           ),
           centerTitle: true,

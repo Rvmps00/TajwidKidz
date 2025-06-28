@@ -33,20 +33,26 @@ class _LearningAlkausar2WidgetState extends State<LearningAlkausar2Widget > {
   late final AudioController audioController;
   bool _isPlaying = false;
 
-  @override
+    @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    kausar2AudioModel = AudioModel(label: 'Kausar2', fileName: 'Modul5/Al-Kausar/Ayat 2.wav');
-    audioController = AudioController();
+  kausar2AudioModel = AudioModel(
+    label: 'Kausar2',
+    fileName: 'Modul5/Al-Kausar/Ayat 2.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(kausar2AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -81,7 +87,7 @@ class _LearningAlkausar2WidgetState extends State<LearningAlkausar2Widget > {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(kausar2AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -142,7 +148,7 @@ class _LearningAlkausar2WidgetState extends State<LearningAlkausar2Widget > {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 18,
-              color: Colors.black,
+              color: Colors.white, // Changed to white for better contrast
             ),
             textAlign: TextAlign.center,
           ),

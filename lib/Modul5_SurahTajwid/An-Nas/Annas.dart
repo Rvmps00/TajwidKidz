@@ -249,7 +249,7 @@ class _LearningAnnasFullWidgetState extends State<LearningAnnasFullWidget> {
                       child: Text(
                         'Surah An-Nas',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.white),
                       ),
                     ),
                     IconButton(

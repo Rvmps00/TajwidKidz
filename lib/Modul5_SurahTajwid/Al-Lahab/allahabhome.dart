@@ -60,7 +60,7 @@ class _LearningAllahabHomeWidgetState
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
-                              color: Colors.black,
+                              color: Colors.white, // Ensuring the text color is white for contrast
                             ),
                           ),
                         ),

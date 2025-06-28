@@ -34,18 +34,24 @@ class _LearningAllahab5WidgetState extends State<LearningAllahab5Widget> {
 
   @override
   void initState() {
-    super.initState();
+  super.initState();
 
-    allahab5AudioModel = AudioModel(label: 'Allahab5', fileName: 'Modul5/Al-Lahab/Ayat 1.wav');
-    audioController = AudioController();
+  allahab5AudioModel = AudioModel(
+    label: 'Lahab5',
+    fileName: 'Modul5/Al-Lahab/Ayat 5.wav',
+  );
+  audioController = AudioController();
 
-    // Listen to player state and update _isPlaying
-    audioController.playerStateStream.listen((state) {
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
+  // ✅ Preload audio di sini
+  audioController.setSource(allahab5AudioModel.fileName);
+
+  // Listen ke playerState
+  audioController.playerStateStream.listen((state) {
+    setState(() {
+      _isPlaying = state == PlayerState.playing;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -80,7 +86,7 @@ class _LearningAllahab5WidgetState extends State<LearningAllahab5Widget> {
     if (_isPlaying) {
       await audioController.pause();
     } else {
-      await audioController.play(allahab5AudioModel.fileName);
+      await audioController.play(); // ✅ Jangan ulang set source
     }
   }
 
@@ -136,7 +142,7 @@ class _LearningAllahab5WidgetState extends State<LearningAllahab5Widget> {
           ),
           title: Text(
             'Level 5 : Belajar Membaca\nSurah dengan Tajwid',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
+            style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
