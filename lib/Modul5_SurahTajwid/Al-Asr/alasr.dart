@@ -126,7 +126,7 @@ class _LearningAlasrfullWidgetState extends State<LearningAlasrfullWidget> {
     if (_isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(AssetSource('audio/alasr.wav'));
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat Al-Asr.wav'));
     }
     setState(() {
       _isPlaying = !_isPlaying;

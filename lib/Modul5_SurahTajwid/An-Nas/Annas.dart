@@ -17,6 +17,7 @@ class LearningAnnasFullWidget extends StatefulWidget {
 class _LearningAnnasFullWidgetState extends State<LearningAnnasFullWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
 
   // Tap recognizers
   late TapGestureRecognizer _birabbiRecognizer;
@@ -211,13 +212,15 @@ class _LearningAnnasFullWidgetState extends State<LearningAnnasFullWidget> {
     );
   }
 
-  Future<void> _playAudio() async {
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource('audio/annas.mp3'));
-    } catch (e) {
-      debugPrint('Error playing audio: $e');
+  void _playPauseAudio() async {
+    if (_isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat An-Nas.wav'));
     }
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
   }
 
   @override
@@ -253,8 +256,14 @@ class _LearningAnnasFullWidgetState extends State<LearningAnnasFullWidget> {
                       ),
                     ),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.volumeHigh, color: Colors.black, size: 30),
-                      onPressed: _playAudio,
+                      icon: FaIcon(
+                        _isPlaying
+                            ? FontAwesomeIcons.volumeHigh
+                            : FontAwesomeIcons.volumeOff,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      onPressed: _playPauseAudio,
                     ),
                   ],
                 ),

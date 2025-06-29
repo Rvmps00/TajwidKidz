@@ -190,7 +190,7 @@ class _LearningAlKafirunFullWidgetState
     if (_isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(AssetSource('audio/alkafirun.wav'));
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat Al-Kafirun.wav'));
     }
     setState(() {
       _isPlaying = !_isPlaying;

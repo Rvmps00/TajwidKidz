@@ -19,6 +19,7 @@ class _LearningAlfatihahfullWidgetState
     extends State<LearningAlfatihahfullWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
 
   // Tap Recognizers
   late TapGestureRecognizer _allahTapRecognizer;
@@ -134,13 +135,15 @@ class _LearningAlfatihahfullWidgetState
     super.dispose();
   }
 
-  Future<void> _playAudio() async {
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource('audio/alfatihah.mp3'));
-    } catch (e) {
-      debugPrint('Error playing audio: $e');
+  void _playPauseAudio() async {
+    if (_isPlaying) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat Al-Fatihah.wav'));
     }
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
   }
 
   @override
@@ -180,9 +183,14 @@ class _LearningAlfatihahfullWidgetState
                       ),
                     ),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.volumeHigh,
-                          color: Colors.black, size: 30),
-                      onPressed: _playAudio,
+                      icon: FaIcon(
+                        _isPlaying
+                            ? FontAwesomeIcons.volumeHigh
+                            : FontAwesomeIcons.volumeOff,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      onPressed: _playPauseAudio,
                     ),
                   ],
                 ),

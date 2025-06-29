@@ -199,7 +199,7 @@ class _LearningQuraisyFullWidgetState
     if (_isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(AssetSource('audio/quraisy.wav'));
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat Quraysh.wav'));
     }
     setState(() {
       _isPlaying = !_isPlaying;

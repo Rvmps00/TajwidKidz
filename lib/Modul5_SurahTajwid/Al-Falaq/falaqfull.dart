@@ -207,7 +207,7 @@ class _LearningAlFalaqFullWidgetState
     if (_isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(AssetSource('audio/alfalaq.wav'));
+      await _audioPlayer.play(AssetSource('audios/modul5/Surat Al-Lahab.wav'));
     }
     setState(() {
       _isPlaying = !_isPlaying;
