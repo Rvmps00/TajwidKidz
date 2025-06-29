@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:TajwidKidz/controller/progress_controller.dart'; // Ganti path jika perlu
+import 'package:TajwidKidz/controller/progress_controller.dart';
 
 class ProgressPageWidget extends StatefulWidget {
   const ProgressPageWidget({super.key});
@@ -67,18 +67,40 @@ class _ProgressPageWidgetState extends State<ProgressPageWidget> {
         }
       }
 
+      // 🔽 Ambil semua user dan hitung total score masing-masing
+      final allUsersSnapshot = await FirebaseFirestore.instance.collection('users').get();
+      final List<Map<String, dynamic>> userScores = [];
+
+      for (final doc in allUsersSnapshot.docs) {
+        final userGames = doc.data()['games'] ?? {};
+        int userTotal = 0;
+
+        for (final game in userGames.values) {
+          if (game is Map) {
+            for (final level in game.values) {
+              if (level is Map && level['completed'] == true) {
+                userTotal += (level['score'] ?? 0) as int;
+              }
+            }
+          }
+        }
+
+        userScores.add({
+          'uid': doc.id,
+          'totalScore': userTotal,
+        });
+      }
+
+      // 🔽 Urutkan berdasarkan skor & cari ranking user login
+      userScores.sort((a, b) => b['totalScore'].compareTo(a['totalScore']));
+      final userRankIndex = userScores.indexWhere((user) => user['uid'] == uid);
+      final userRank = userRankIndex >= 0 ? userRankIndex + 1 : null;
 
       setState(() {
         totalScore = tempScore;
         maxLevel = tempMaxLevel;
         lastGame = tempLastGame.replaceAll('_', ' ');
-        rank = totalScore >= 1000
-            ? 'Peringkat 1'
-            : totalScore >= 500
-                ? 'Peringkat 2'
-                : totalScore > 0
-                    ? 'Peringkat 3'
-                    : 'Belum ada';
+        rank = userRank != null ? 'Peringkat $userRank' : 'Belum ada';
         _progressList = result;
       });
     }
