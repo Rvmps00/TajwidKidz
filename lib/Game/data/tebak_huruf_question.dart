@@ -496,7 +496,7 @@ final List<HijaiyahQuestion2> tebakHurufQuestions3 = [
     correctAnswer: "ha",
     feedbackImagePath: "assets/images/hijaiyah/ha.png",
     feedbackNotes: "Terletak pada tengah tenggorokan.",
-    optionsAudioPath: ["ha_6.wav", "haa_25.wav", "kha_6.wav", "ain_17.wav"],
+    optionsAudioPath: ["ha_6.wav", "ha`_25.wav", "kha_6.wav", "ain_17.wav"],
   ),
 
   // 4. Soal: Huruf "ظ"
