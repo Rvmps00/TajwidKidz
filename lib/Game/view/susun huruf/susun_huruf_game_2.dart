@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/Game/view/result_screen.dart';
-import 'package:untitled/Game/viewmodel/susun%20huruf/susun_huruf_viewmodel2.dart';
+import 'package:TajwidKidz/Game/view/result_screen.dart';
+import 'package:TajwidKidz/Game/viewmodel/susun%20huruf/susun_huruf_viewmodel2.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class SusunHurufGame2 extends StatefulWidget {
@@ -66,6 +66,8 @@ class _SusunHurufGame2State extends State<SusunHurufGame2> {
                           score: controller.score,
                           benar: controller.correctAnswers,
                           totalQuestions: controller.questions.length,
+                          gameName: 'Susun_Huruf', 
+                          level: 2,
                           onRetry: () {
                             controller.resetGame();
                             Navigator.pushReplacement(

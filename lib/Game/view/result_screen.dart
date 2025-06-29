@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final int score;
   final int benar;
   final int totalQuestions;
   final VoidCallback onRetry;
+  final String gameName; // contoh: "Tebak_Huruf"
+  final int level;       // contoh: 1
 
   const ResultScreen({
     super.key,
@@ -12,7 +16,41 @@ class ResultScreen extends StatelessWidget {
     required this.benar,
     required this.totalQuestions,
     required this.onRetry,
+    required this.gameName,
+    required this.level,
   });
+
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _saveGameCompletion();
+  }
+
+  Future<void> _saveGameCompletion() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
+      final levelKey = 'level_${widget.level}';
+      await userDoc.set({
+        'games': {
+          widget.gameName: {
+            levelKey: {
+              'completed': true,
+              'score': widget.score,
+              'correct': widget.benar,
+              'total': widget.totalQuestions,
+              'timestamp': FieldValue.serverTimestamp(),
+            }
+          }
+        }
+      }, SetOptions(merge: true));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +63,7 @@ class ResultScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Judul Selamat
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -43,8 +82,10 @@ class ResultScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
+
+                // Pesan selesai
                 const Text(
-                  'Kamu sudah menyelesaikan\nseluruh kuis tebak huruf\nhijaiyah!',
+                  'Kamu sudah menyelesaikan\nseluruh kuis!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -52,16 +93,22 @@ class ResultScreen extends StatelessWidget {
                     fontSize: 20,
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
+                // Total poin
                 Text(
-                  'Total Poin yang didapat: $score pts',
+                  'Total Poin yang didapat: ${widget.score} pts',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
+                // Container hijau jumlah benar
                 Container(
                   width: 337,
                   height: 69,
@@ -71,7 +118,7 @@ class ResultScreen extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'Jawaban benar: $benar/$totalQuestions',
+                    'Jawaban benar: ${widget.benar}/${widget.totalQuestions}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
@@ -79,22 +126,28 @@ class ResultScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
+                // Pesan semangat
                 const Text(
-                  'Hebat Banget, Semangat terus\nuntuk kuis kuis selanjutnya ya!',
+                  'Hebat Banget, Semangat terus\nuntuk kuis-kuis selanjutnya ya!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
+                // Tombol-tombol
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Button "Ulangi Kuis"
+                    // Tombol Ulangi Kuis
                     SizedBox(
-                      width: 150,
+                      width: 163,
                       height: 59,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -103,7 +156,7 @@ class ResultScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: onRetry,
+                        onPressed: widget.onRetry,
                         child: const Text(
                           'Ulangi Kuis',
                           style: TextStyle(
@@ -116,9 +169,10 @@ class ResultScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Button "Menu Utama"
+
+                    // Tombol Menu Utama
                     SizedBox(
-                      width: 150,
+                      width: 163,
                       height: 59,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
