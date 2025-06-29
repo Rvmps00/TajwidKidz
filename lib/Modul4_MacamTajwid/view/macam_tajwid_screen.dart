@@ -88,7 +88,7 @@ class _MacamTajwidScreenState extends State<MacamTajwidScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Macam - Macam Tajwid"),
-          backgroundColor: const Color(0xFFFAFDCB),
+          backgroundColor: const Color(0xFF037A16),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
