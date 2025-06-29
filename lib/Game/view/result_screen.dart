@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ResultScreen extends StatefulWidget {
+class ResultScreen extends StatelessWidget {
   final int score;
   final int benar;
   final int totalQuestions;
   final VoidCallback onRetry;
-  final String gameName; // misalnya: "tebak_huruf"
-  final int level;       // misalnya: 1, 2, 3
 
   const ResultScreen({
     super.key,
@@ -16,40 +12,7 @@ class ResultScreen extends StatefulWidget {
     required this.benar,
     required this.totalQuestions,
     required this.onRetry,
-    required this.gameName,
-    required this.level,
   });
-
-  @override
-  State<ResultScreen> createState() => _ResultScreenState();
-}
-
-class _ResultScreenState extends State<ResultScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _saveGameCompletion(widget.gameName, widget.level);
-  }
-
-  Future<void> _saveGameCompletion(String gameName, int level) async {
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  if (uid != null) {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
-    await userDoc.set({
-      'games': {
-        gameName: {
-          'level_$level': {
-            'completed': true,
-            'score': widget.score,
-            'correct': widget.benar,
-            'total': widget.totalQuestions,
-            'timestamp': FieldValue.serverTimestamp(),
-          },
-        }
-      }
-    }, SetOptions(merge: true));
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +44,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Kamu sudah menyelesaikan\nseluruh kuis!',
+                  'Kamu sudah menyelesaikan\nseluruh kuis tebak huruf\nhijaiyah!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -91,7 +54,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Total Poin yang didapat: ${widget.score} pts',
+                  'Total Poin yang didapat: $score pts',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -108,7 +71,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'Jawaban benar: ${widget.benar}/${widget.totalQuestions}',
+                    'Jawaban benar: $benar/$totalQuestions',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
@@ -118,7 +81,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Hebat Banget, Semangat terus\nuntuk kuis-kuis selanjutnya ya!',
+                  'Hebat Banget, Semangat terus\nuntuk kuis kuis selanjutnya ya!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -131,7 +94,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     // Button "Ulangi Kuis"
                     SizedBox(
-                      width: 163,
+                      width: 150,
                       height: 59,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -140,7 +103,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: widget.onRetry,
+                        onPressed: onRetry,
                         child: const Text(
                           'Ulangi Kuis',
                           style: TextStyle(
@@ -155,7 +118,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     const SizedBox(width: 12),
                     // Button "Menu Utama"
                     SizedBox(
-                      width: 163,
+                      width: 150,
                       height: 59,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
