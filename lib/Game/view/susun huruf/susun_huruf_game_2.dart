@@ -162,7 +162,7 @@ class _SusunHurufGame2State extends State<SusunHurufGame2> {
                                       child: Text(
                                         question.word,
                                         style: const TextStyle(
-                                          fontSize: 31,
+                                          fontSize: 27,
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                         ),
