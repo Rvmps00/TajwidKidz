@@ -69,7 +69,6 @@ class _SusunHurufGameState extends State<SusunHurufGame> {
                           gameName: 'Susun_Huruf', 
                           level: 1,
                           onRetry: () {
-                            controller.resetGame();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -163,7 +162,7 @@ class _SusunHurufGameState extends State<SusunHurufGame> {
                                       child: Text(
                                         question.word,
                                         style: const TextStyle(
-                                          fontSize: 31,
+                                          fontSize: 27,
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                         ),

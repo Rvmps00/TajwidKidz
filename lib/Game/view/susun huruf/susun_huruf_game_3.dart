@@ -78,7 +78,6 @@ class _SusunHurufGame3State extends State<SusunHurufGame3> {
                                   gameName: 'Susun_Huruf', 
                                   level: 2,
                                   onRetry: () {
-                                    controller.resetGame();
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
