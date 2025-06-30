@@ -34,10 +34,54 @@ class TebakHurufViewmodel3 extends ChangeNotifier {
   }
 
   void _initializeGameQuestions() {
-    final shuffledQuestions = _allQuestions.toList()..shuffle();
-    _questionsForGame = shuffledQuestions.take(20).toList();
-    _loadAnswerForQuestion(_currentIndex);
+  final shuffledQuestions = _allQuestions.toList()..shuffle();
+  _questionsForGame = shuffledQuestions.take(20).toList();
+
+  for (var q in _questionsForGame) {
+    if (q.options.isNotEmpty) {
+      final originalCorrect = q.correctAnswer;
+
+      // Sinkronisasi jika punya audio
+      if (q.optionsAudioPath != null && q.optionsAudioPath!.length == q.options.length) {
+        final paired = List.generate(
+          q.options.length,
+          (i) => MapEntry(q.options[i], q.optionsAudioPath![i]),
+        )..shuffle();
+
+        q.options = paired.map((e) => e.key).toList();
+        q.optionsAudioPath = paired.map((e) => e.value).toList();
+      } else {
+        q.options.shuffle();
+      }
+
+      // ✅ Update correctAnswer setelah shuffle
+      if (q.options.contains(originalCorrect)) {
+        q.correctAnswer = originalCorrect;
+      } else {
+        // Cari di paired sebelum shuffle
+        final paired = List.generate(
+          q.options.length,
+          (i) => MapEntry(q.options[i], q.optionsAudioPath?[i]),
+        );
+
+        final correctEntry = paired.firstWhere(
+          (entry) => entry.key == originalCorrect,
+          orElse: () => MapEntry('', ''),
+        );
+
+        if (correctEntry.key.isNotEmpty) {
+          q.correctAnswer = correctEntry.key;
+        }
+      }
+    }
   }
+
+  _currentIndex = 0;
+  _questionAnswers.clear();
+  _isFinished = false;
+  _loadAnswerForQuestion(_currentIndex);
+  notifyListeners();
+}
 
   List<HijaiyahQuestion2> get questions => _questionsForGame;
   int get currentIndex => _currentIndex;

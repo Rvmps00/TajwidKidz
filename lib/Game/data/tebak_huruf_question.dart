@@ -165,7 +165,7 @@ final List<HijaiyahQuestion> tebakHurufQuestions = [
   // 17. Huruf: ف
   HijaiyahQuestion(
     text: 'Pilih huruf hijaiyah\ndari bacaan:',
-    wordEngine: "ف",
+    word: "ف",
     options: ["tsa", "fa", "qaf", "kaf"], // Diacak dari ["fa", "qaf", "kaf", "tsa"]
     correctAnswer: "fa",
     notes: "Terletak pada pertemuan antara ujung gigi seri atas yang bertemu dengan perut bibir bawah.",
@@ -512,11 +512,11 @@ final List<HijaiyahQuestion2> tebakHurufQuestions3 = [
     type: QuestionType.listenAndChooseText,
     text: "Perhatikan huruf berikut, lalu pilih audio pelafalan yang benar:",
     questionWord: "ث",
-    options: ["sha", "tsa", "ta", "sin"], // Diacak dari ["tsa", "ta", "sin", "sha"]
+    options: ["sa", "tsa", "ta", "dza"], // Diacak dari ["ta", "tsa", "dza", "sa"]
     correctAnswer: "tsa",
     feedbackImagePath: "assets/images/hijaiyah/tsa.png",
     feedbackNotes: "Keluar dari dua tepi ujung lidah dari arah permukaan atasnya menyentuh ujung dua gigi seri atas.",
-    optionsAudioPath: ["syin_12.wav", "tsa_4.wav", "ta_3.wav", "sin_11.wav"], // Diacak sesuai options
+    optionsAudioPath: ["sin_11.wav", "tsa_4.wav", "ta_3.wav", "dzal_8.wav"], // Diacak sesuai options
   ),
   // 9. Huruf "ت"
   HijaiyahQuestion2(

@@ -2,7 +2,7 @@ class HijaiyahQuestion {
   final String text;
   final String word;
   final String correctAnswer;
-  final List<String> options;
+  List<String> options;
   final String? notes;
   final String? correctImagePath;
   final String? audioPath;
@@ -33,15 +33,15 @@ class HijaiyahQuestion2 {
   final String? questionNotes; // Catatan yg ditampilkan sbg soal
 
   // Untuk opsi & jawaban
-  final List<String> options;
-  final String correctAnswer;
+  List<String> options;
+  String correctAnswer;
 
   // Untuk feedback (setelah menjawab benar)
   final String? feedbackImagePath;
   final String? feedbackNotes;
 
-  final String? audioPath;
-  final List<String>? optionsAudioPath;
+  String? audioPath;
+  List<String>? optionsAudioPath;
 
   HijaiyahQuestion2({
     required this.type,

@@ -36,86 +36,96 @@ class _TebakHurufGame3State extends State<TebakHurufGame3> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => TebakHurufViewmodel3(),
-      child: Scaffold(
-        backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
-        appBar: AppBar(
-        title: const Text(
-          'Mini Game',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        // 3. Buat AppBar juga transparan dan hilangkan shadow
-        backgroundColor: Color(0xFF037A16),
-        elevation: 0,
-        centerTitle: true,
-      ),
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, viewportConstraints) {
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                    child: Center(
-                      child: Consumer<TebakHurufViewmodel3>(
-                        builder: (context, controller, _) {
-                          if (controller.questions.isEmpty) return const CircularProgressIndicator();
+      child: Consumer<TebakHurufViewmodel3>(
+        builder: (context, controller, _) {
+          if (controller.questions.isEmpty) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-                          controller.setOnGameFinished(() {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(
-                                  score: controller.score,
-                                  totalQuestions: controller.questions.length,
-                                  benar: controller.correctAnswers,
-                                  gameName: 'Tebak_Huruf', 
-                                  level: 3,
-                                  onRetry: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const TebakHurufGame3())),
-                                ),
-                              ),
-                            );
-                          });
+          controller.setOnGameFinished(() {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(
+                  score: controller.score,
+                  totalQuestions: controller.questions.length,
+                  benar: controller.correctAnswers,
+                  gameName: 'Tebak_Huruf',
+                  level: 3,
+                  onRetry: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TebakHurufGame3()),
+                  ),
+                ),
+              ),
+            );
+          });
 
-                          final question = controller.currentQuestion;
-                          
-                          return Container(
+          final question = controller.currentQuestion;
+
+          return Scaffold(
+            backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
+            appBar: AppBar(
+              title: const Text(
+                'Mini Game',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              backgroundColor: const Color(0xFF037A16),
+              elevation: 0,
+              centerTitle: true,
+            ),
+            body: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, viewportConstraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                        child: Center(
+                          child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
-                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5)],
+                              boxShadow: [
+                                BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5)
+                              ],
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 _buildHeader(controller),
-                                // RENDER UI BERDASARKAN TIPE SOAL YANG BENAR
                                 if (question.type == QuestionType.listenAndChooseText)
                                   _buildUI_LihatHurufPilihAudio(context, controller)
                                 else
                                   _buildUI_DengarAudioPilihTeks(context, controller),
-                                
                                 _buildFeedbackArea(context, controller),
                                 const SizedBox(height: 24),
                                 _buildNextButton(controller),
                               ],
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
+
 
   // --- WIDGET BUILDER UTAMA ---
 

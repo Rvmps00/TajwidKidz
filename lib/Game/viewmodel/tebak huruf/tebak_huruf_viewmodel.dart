@@ -47,8 +47,20 @@ class TebakHurufViewmodel extends ChangeNotifier {
 void _initializeGameQuestions() {
   final shuffledQuestions = _allQuestions.toList()..shuffle();
   _questionsForGame = shuffledQuestions.take(20).toList();
+
+  // Shuffle option untuk masing-masing soal yang dipilih
+  for (var q in _questionsForGame) {
+    q.options.shuffle();
+  }
+
+  _currentIndex = 0;
+  _questionAnswers.clear();
+  _isFinished = false;
   _loadAnswerForQuestion(_currentIndex);
+  notifyListeners();
 }
+
+
 
   List<HijaiyahQuestion> get questions => _questionsForGame;
   int get currentIndex => _currentIndex;
