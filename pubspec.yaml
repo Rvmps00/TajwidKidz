@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image: ^4.1.0
   image_picker: ^0.8.5+3
   firebase_core: ^3.9.0
   firebase_auth: ^5.3.4
@@ -117,7 +118,9 @@ flutter:
     - assets/images/
     - assets/images/m1/
     - assets/images/hijaiyah/
+    - assets/images/puzzle_modul/
     - assets/audios/
+    - assets/audios/sounds/
     - assets/audios/modul1/
     - assets/audios/modul2/
     - assets/audios/modul3/

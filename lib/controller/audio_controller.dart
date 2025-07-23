@@ -58,4 +58,6 @@ class AudioController {
   Stream<PlayerState> get playerStateStream => _player.onPlayerStateChanged;
 
   Future<PlayerState> get currentState async => _player.state;
+
+  void dispose() {}
 }
