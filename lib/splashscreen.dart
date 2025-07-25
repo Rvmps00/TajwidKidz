@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'homepage.dart';
 import 'login.dart';
 
 class SplashScreenModel {
@@ -26,11 +28,21 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
 
     // Delay 3 detik lalu navigate
     Future.delayed(const Duration(seconds: 5)).then((_) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const LoginWidget(),
-        ),
-      );
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid != null) {
+        if (uid == 'n03FsoL7cbalgNkeNAzd1I83zru1') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePageWidget()),
+          );
+        }
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const LoginWidget(),
+          ),
+        );
+      }
     });
   }
 

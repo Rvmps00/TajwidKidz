@@ -213,4 +213,12 @@ class SusunHurufViewmodel2 extends ChangeNotifier {
   void setOnGameFinished(VoidCallback callback) {
     onGameFinished = callback;
   }
+
+  void cheatScoreFull() {
+    _score = 100; // 10 soal x 10 = 100
+    correctAnswers = _questions.length;
+    _isAnswerComplete = true;
+    notifyListeners();
+    onGameFinished?.call();
+  }
 }

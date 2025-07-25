@@ -42,19 +42,19 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
         appBar: AppBar(
-        title: const Text(
-          'Mini Game',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          title: const Text(
+            'Tebak Huruf Level 1',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
+          // 3. Buat AppBar juga transparan dan hilangkan shadow
+          backgroundColor: Color(0xFF037A16),
+          elevation: 0,
+          centerTitle: true,
         ),
-        // 3. Buat AppBar juga transparan dan hilangkan shadow
-        backgroundColor: Color(0xFF037A16),
-        elevation: 0,
-        centerTitle: true,
-      ),
         body: SafeArea(
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -84,7 +84,7 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                   onRetry: () {
                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const TebakHurufGame()));
                                   },
-                                  gameName: 'Tebak_Huruf', 
+                                  gameName: 'Tebak Huruf',
                                   level: 1,
                                 ),
                               ),
@@ -98,16 +98,16 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             width: containerWidth,
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ]
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ]
                             ),
                             child: Stack(
                               children: [
@@ -119,8 +119,8 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                     onPressed: controller.currentIndex == 0
                                         ? null
                                         : () {
-                                            controller.previousQuestion();
-                                          },
+                                      controller.previousQuestion();
+                                    },
                                   ),
                                 ),
                                 Column(
@@ -197,7 +197,7 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                         ),
                                       ],
                                     ),
-                                    
+
                                     const SizedBox(height: 28),
 
                                     Column(
@@ -240,78 +240,78 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                         child: currentQuestionIsCorrectlyAnswered
                                             ? Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    width: 50,
-                                                    height: 50,
-                                                    decoration: const BoxDecoration(
-                                                      color: Color.fromRGBO(0, 153, 241, 1),
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: IconButton(
-                                                      icon: const Icon(Icons.volume_up, color: Colors.white, size: 28),
-                                                      onPressed: () {
-                                                        _speak(question.audioPath);
-                                                      },
-                                                    ),
-                                                  ),
-
-                                                  const SizedBox(height: 8),
-
-                                                  const Text(
-                                                    'Hebat! Jawabanmu benar!',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Poppins',
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Color.fromRGBO(90, 193, 120, 1),
-                                                    ),
-                                                  ),
-
-                                                  const SizedBox(height: 8),
-
-                                                  if (question.correctImagePath != null && question.correctImagePath!.isNotEmpty)
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                                      child: Image.asset(
-                                                        question.correctImagePath!,
-                                                        height: 80,
-                                                        errorBuilder: (context, error, stackTrace) {
-                                                          return const Text('Gambar tidak ada', style: TextStyle(fontSize: 10));
-                                                        },
-                                                      ),
-                                                    ),
-
-                                                  const SizedBox(height: 8),
-
-                                                  if (question.notes != null && question.notes!.isNotEmpty)
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(top: 4.0),
-                                                      child: Text(
-                                                        question.notes!,
-                                                        textAlign: TextAlign.center,
-                                                        style: const TextStyle(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.normal,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                ],
-                                              )
-                                            : Text(
-                                                "Yuk coba lagi! Jawaban yang\nbenar adalah '${question.correctAnswer}'",
-                                                style: const TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color.fromRGBO(242, 125, 125, 1),
-                                                ),
-                                                textAlign: TextAlign.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: const BoxDecoration(
+                                                color: Color.fromRGBO(0, 153, 241, 1),
+                                                shape: BoxShape.circle,
                                               ),
+                                              child: IconButton(
+                                                icon: const Icon(Icons.volume_up, color: Colors.white, size: 28),
+                                                onPressed: () {
+                                                  _speak(question.audioPath);
+                                                },
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 8),
+
+                                            const Text(
+                                              'Hebat! Jawabanmu benar!',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color.fromRGBO(90, 193, 120, 1),
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 8),
+
+                                            if (question.correctImagePath != null && question.correctImagePath!.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                                child: Image.asset(
+                                                  question.correctImagePath!,
+                                                  height: 80,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return const Text('Gambar tidak ada', style: TextStyle(fontSize: 10));
+                                                  },
+                                                ),
+                                              ),
+
+                                            const SizedBox(height: 8),
+
+                                            if (question.notes != null && question.notes!.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 4.0),
+                                                child: Text(
+                                                  question.notes!,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        )
+                                            : Text(
+                                          "Yuk coba lagi! Jawaban yang\nbenar adalah '${question.correctAnswer}'",
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(242, 125, 125, 1),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                     const SizedBox(height: 24),
                                     Padding(
@@ -330,9 +330,13 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
                                           ),
                                           onPressed: controller.isAnswered
                                               ? () {
-                                                  controller.nextQuestion();
-                                                }
+                                            controller.nextQuestion();
+                                          }
                                               : null,
+                                          /// Code untuk bypass agar nilai terpenuhi
+                                          // onPressed: () {
+                                          //   controller.cheatScoreFull();
+                                          // },
                                           child: const Text(
                                             'Lanjut',
                                             style: TextStyle(
@@ -363,14 +367,13 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
     );
   }
 
-
   Widget _buildOption(
-    BuildContext context,
-    TebakHurufViewmodel controller,
-    String option, {
-    required int index,
-    double? maxWidth,
-  }) {
+      BuildContext context,
+      TebakHurufViewmodel controller,
+      String option, {
+        required int index,
+        double? maxWidth,
+      }) {
     final bool isCurrentQuestionAnswered = controller.isAnswered;
     final String? currentSelectedAnswer = controller.selectedAnswer;
     final String correctAnswer = controller.currentQuestion.correctAnswer;
@@ -390,13 +393,13 @@ class _TebakHurufGameState extends State<TebakHurufGame> {
 
     return SizedBox(
       width: maxWidth,
-      height: 100, 
+      height: 100,
       child: GestureDetector(
         onTap: isCurrentQuestionAnswered
             ? null
             : () {
-                controller.answer(option);
-              },
+          controller.answer(option);
+        },
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

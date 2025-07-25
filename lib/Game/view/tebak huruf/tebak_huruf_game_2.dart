@@ -71,7 +71,7 @@ class _TebakHurufGame2State extends State<TebakHurufGame2> {
                               score: controller.score,
                               totalQuestions: controller.questions.length,
                               benar: controller.correctAnswers,
-                              gameName: 'Tebak_Huruf', 
+                              gameName: 'Tebak Huruf',
                               level: 2,                 
                               onRetry: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const TebakHurufGame2())),
                             ),
@@ -324,7 +324,11 @@ class _TebakHurufGame2State extends State<TebakHurufGame2> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: controller.isAnswered ? Colors.blue : Colors.grey),
         onPressed: controller.isAnswered ? () => controller.nextQuestion() : null,
-        child: const Text('Lanjut', style: TextStyle(fontSize: 16, color: Colors.white)),
+        // onPressed: () {
+        //   controller.cheatScoreFull();
+        // },
+        child: const Text(
+            'Lanjut', style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
     );
   }

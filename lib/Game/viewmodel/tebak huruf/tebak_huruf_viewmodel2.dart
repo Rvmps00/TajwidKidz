@@ -146,4 +146,12 @@ class TebakHurufViewmodel2 extends ChangeNotifier {
   void setOnGameFinished(VoidCallback callback) {
     onGameFinishedCallback = callback;
   }
+
+  void cheatScoreFull() {
+    _score = 200; // 20 soal x 10 = 200
+    _correctAnswers = _questionsForGame.length;
+    _isFinished = true;
+    notifyListeners();
+    onGameFinishedCallback?.call();
+  }
 }

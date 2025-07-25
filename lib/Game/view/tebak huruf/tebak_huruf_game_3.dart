@@ -52,7 +52,7 @@ class _TebakHurufGame3State extends State<TebakHurufGame3> {
                   score: controller.score,
                   totalQuestions: controller.questions.length,
                   benar: controller.correctAnswers,
-                  gameName: 'Tebak_Huruf',
+                  gameName: 'Tebak Huruf',
                   level: 3,
                   onRetry: () => Navigator.pushReplacement(
                     context,
@@ -327,6 +327,9 @@ class _TebakHurufGame3State extends State<TebakHurufGame3> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: controller.isAnswered ? Colors.blue : Colors.grey),
         onPressed: controller.isAnswered ? () => controller.nextQuestion() : null,
+        // onPressed: () {
+        //   controller.cheatScoreFull();
+        // },
         child: const Text('Lanjut', style: TextStyle(fontSize: 16, color: Colors.white)),
       ),
     );

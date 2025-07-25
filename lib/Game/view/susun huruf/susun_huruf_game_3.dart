@@ -75,8 +75,8 @@ class _SusunHurufGame3State extends State<SusunHurufGame3> {
                                   score: controller.score,
                                   benar: controller.correctAnswers,
                                   totalQuestions: controller.questions.length,
-                                  gameName: 'Susun_Huruf', 
-                                  level: 2,
+                                  gameName: 'Susun Huruf',
+                                  level: 3,
                                   onRetry: () {
                                     Navigator.pushReplacement(
                                       context,
@@ -312,6 +312,9 @@ class _SusunHurufGame3State extends State<SusunHurufGame3> {
                                                 controller.nextQuestion();
                                               }
                                             : null,
+                                        // onPressed: () {
+                                        //   controller.cheatScoreFull();
+                                        // },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: const Color.fromRGBO(0, 153, 241, 1),
                                           shape: RoundedRectangleBorder(
