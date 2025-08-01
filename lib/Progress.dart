@@ -28,12 +28,16 @@ class _ProgressPageWidgetState extends State<ProgressPageWidget> {
   int maxLevel = 0;
   String lastGame = '-';
   String rank = 'Belum ada';
+  List<String> completedPuzzleImages = [];
+  String? latestPuzzleImage;
 
   @override
   void initState() {
     super.initState();
     _loadProgress();
+    _fetchAchievements(); // Tambahan
   }
+
 
   Future<void> _loadProgress() async {
     final result = await _progressController.getProgress();
@@ -106,6 +110,41 @@ class _ProgressPageWidgetState extends State<ProgressPageWidget> {
     }
   }
 
+  Future<void> _fetchAchievements() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final uid = user.uid;
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    List<String> assetPuzzlePaths = [];
+    
+    if (userDoc.exists) {
+      final userData = userDoc.data()!;
+      final Map<String, dynamic> achievementData = userData['achievements_data'] ?? {};
+
+      final completedRewards = achievementData.entries
+          .where((entry) => entry.value is Map && entry.value['completed'] == true)
+          .toList();
+
+      completedRewards.sort((a, b) {
+        final aTimestamp = a.value['timestamp'] as Timestamp?;
+        final bTimestamp = b.value['timestamp'] as Timestamp?;
+        return (aTimestamp?.toDate() ?? DateTime(2000))
+            .compareTo(bTimestamp?.toDate() ?? DateTime(2000));
+      });
+
+      assetPuzzlePaths = completedRewards
+          .map((entry) => 'assets/images/puzzle_modul/${entry.key}.png')
+          .toList();
+    }
+   setState(() {
+      latestPuzzleImage = assetPuzzlePaths.isNotEmpty ? assetPuzzlePaths.last : null;
+    completedPuzzleImages = assetPuzzlePaths;
+    });
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,6 +213,79 @@ class _ProgressPageWidgetState extends State<ProgressPageWidget> {
               ),
 
               const SizedBox(height: 48),
+
+              // ✅ Box Achievement Puzzle
+              _buildBox(
+              icon: Icons.image_outlined,
+              title: 'Achievement',
+              backgroundColor: const Color(0xFFDDEB9D),
+              children: [
+                if (latestPuzzleImage != null)
+                  Column(
+                    children: [
+                      Image.asset(
+                        latestPuzzleImage!,
+                        height: 150,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green.shade800,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.photo_library_outlined),
+                        label: const Text("Lihat Koleksi Lengkap"),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => Dialog(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        "Koleksi Puzzle Rewards",
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Wrap(
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: completedPuzzleImages.map((imgPath) {
+                                        return ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Image.asset(
+                                            imgPath,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      }).toList(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  )
+                else
+                  const Text("Belum ada reward puzzle yang diperoleh."),
+              ],
+            ),
+            const SizedBox(height: 48),
             ],
           ),
         ),

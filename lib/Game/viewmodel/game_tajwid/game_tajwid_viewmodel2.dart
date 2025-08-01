@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:firebase_storage/firebase_storage.dart';
 import '../../data/game_tajwid_question.dart';
 import '../../models/question_model.dart';
+import '/controller/audio_record_controller.dart';
+import '/controller/evaluation_controller.dart';
 
-// Class untuk menyimpan state jawaban
 class TajwidAnswer2 {
   final bool isCorrect;
   final String userAnswer;
+  final String result;
+  final String errorMessage;
 
-  TajwidAnswer2({required this.isCorrect, required this.userAnswer});
+  TajwidAnswer2({
+    required this.isCorrect,
+    required this.userAnswer,
+    required this.result,
+    required this.errorMessage,
+  });
 }
 
 class GameTajwid2ViewModel extends ChangeNotifier {
@@ -18,11 +26,8 @@ class GameTajwid2ViewModel extends ChangeNotifier {
   int _currentIndex = 0;
   int _score = 0;
   int _correctAnswers = 0;
-
-  bool isRecording = false;
+  bool _isRecording = false;
   bool isFinished = false;
-
-  final stt.SpeechToText _speech = stt.SpeechToText();
 
   final Map<int, TajwidAnswer2> _answers = {};
   TajwidAnswer2? get currentAnswer => _answers[_currentIndex];
@@ -32,6 +37,7 @@ class GameTajwid2ViewModel extends ChangeNotifier {
   TajwidLevel2Question get currentQuestion => _questions[_currentIndex];
   int get score => _score;
   int get correctAnswers => _correctAnswers;
+  bool get isRecording => _isRecording;
   bool get isQuestionAnswered => _answers.containsKey(_currentIndex);
 
   VoidCallback? onGameFinished;
@@ -40,112 +46,147 @@ class GameTajwid2ViewModel extends ChangeNotifier {
     _initializeGameQuestions();
   }
 
-  // BARU: Method untuk mengacak dan menyiapkan soal untuk game
   void _initializeGameQuestions() {
-    // 1. Buat salinan dari master data soal
     final tempList = List<TajwidLevel2Question>.from(_allQuestions);
-    // 2. Acak urutan salinan tersebut
     tempList.shuffle();
-    // 3. Gunakan list yang sudah diacak sebagai soal untuk game
     _questions = tempList;
   }
 
   Future<void> startListening() async {
-    if (isQuestionAnswered) return;
+    final currentAnswer = _answers[_currentIndex];
+    if (currentAnswer != null && currentAnswer.result.isNotEmpty) return;
 
     final permission = await Permission.microphone.request();
-    if (!permission.isGranted) return;
-
-    bool available = await _speech.initialize(
-      onStatus: (status) {
-        debugPrint("Speech Status: $status");
-        if (status == "done" || status == "notListening") {
-          isRecording = false;
-          notifyListeners();
-        }
-      },
-      onError: (error) {
-        debugPrint("Speech Error: ${error.errorMsg}");
-        _answers[_currentIndex] = TajwidAnswer2(
-          isCorrect: false,
-          userAnswer: "Gagal mengenali suara, ulangi.",
-        );
-        isRecording = false;
-        notifyListeners();
-      },
-    );
-
-    if (!available) {
-      _answers[_currentIndex] = TajwidAnswer2(
+    if (!permission.isGranted) {
+      _saveQuestionAnswer(
+        result: "",
+        errorMessage: "Izin mikrofon ditolak.",
+        userAnswer: "",
         isCorrect: false,
-        userAnswer: "Speech recognition tidak tersedia.",
       );
-      isRecording = false;
       notifyListeners();
       return;
     }
 
-    isRecording = true;
-    notifyListeners();
+    final recorder = AudioRecordController();
+    final audio = await recorder.startRecording();
 
-    // Ambil dan pilih locale
-    final locales = await _speech.locales();
-    final List<String> preferredLocales = ["ar", "id_ID", "en_US"];
-    String? selectedLocale;
-
-    for (final loc in preferredLocales) {
-      if (locales.any((l) => l.localeId == loc)) {
-        selectedLocale = loc;
-        break;
-      }
+    if (audio == null) {
+      _saveQuestionAnswer(
+        result: "",
+        errorMessage: "Gagal memulai rekaman.",
+        userAnswer: "",
+        isCorrect: false,
+      );
+      notifyListeners();
+      return;
     }
 
-    debugPrint("Menggunakan locale: $selectedLocale");
+    _isRecording = true;
+    notifyListeners();
 
-    _speech.listen(
-      localeId: selectedLocale,
-      listenFor: const Duration(seconds: 10),
-      pauseFor: const Duration(seconds: 5),
-      partialResults: false,
-      cancelOnError: true,
-      onResult: (result) {
-        debugPrint("Hasil suara: '${result.recognizedWords}'");
-        if (result.recognizedWords.isEmpty) {
-          _answers[_currentIndex] = TajwidAnswer2(
-            isCorrect: false,
-            userAnswer: "Tidak ada suara terdeteksi.",
-          );
-        } else {
-          _processResult(result.recognizedWords);
-        }
+    await Future.delayed(const Duration(seconds: 5));
 
-        isRecording = false;
-        notifyListeners();
-      },
-      onSoundLevelChange: (level) {
-        debugPrint("Mic level: $level");
-      },
+    final folder = 'recordings/Game';
+    await recorder.stopAndUpload(audio, folderPath: folder);
+    final fullPath = '$folder/${audio.fileName}';
+
+    _isRecording = false;
+    notifyListeners();
+
+    _saveQuestionAnswer(
+      result: "⏳ Menilai bacaan kamu...",
+      errorMessage: "",
+      userAnswer: fullPath,
+      isCorrect: false,
     );
+    notifyListeners();
+
+    final isReady = await _waitUntilFirebaseFileAccessible(fullPath);
+    if (isReady) {
+      await _evaluateWithRetry(fullPath, maxRetries: 2);
+    } else {
+      _saveQuestionAnswer(
+        result: "",
+        errorMessage: "❌ Gagal mengakses file audio di Firebase.",
+        userAnswer: fullPath,
+        isCorrect: false,
+      );
+    }
+
+    notifyListeners();
   }
 
-  void _processResult(String userAnswer) {
-    final correct = currentQuestion.correctAnswer.toLowerCase().trim();
-    final answer = userAnswer.toLowerCase().trim();
-
-    bool isCorrect = answer == correct; // bisa disesuaikan jika ingin contain()
-
-    if (isCorrect) {
-      _score += 10;
-      _correctAnswers++;
+  Future<bool> _waitUntilFirebaseFileAccessible(String fullpath,
+      {int maxRetries = 5}) async {
+    int attempt = 0;
+    while (attempt < maxRetries) {
+      try {
+        final ref = FirebaseStorage.instance.ref(fullpath);
+        final url = await ref.getDownloadURL();
+        if (url.isNotEmpty) return true;
+      } catch (_) {
+        // retry
+      }
+      attempt++;
+      await Future.delayed(const Duration(seconds: 2));
     }
+    return false;
+  }
 
+  Future<void> _evaluateWithRetry(String fullPath, {int maxRetries = 3}) async {
+    int attempt = 0;
+    while (attempt < maxRetries) {
+      try {
+        final result = await EvaluationController().evaluateFromFirebasePath(fullPath);
+
+        final madScore = result?.mad ?? 0.0;
+        final ghunnahScore = result?.ghunnah ?? 0.0;
+        final ikhfaaScore = result?.ikhfa ?? 0.0;
+
+        final isCorrect = madScore > 0.30 || ghunnahScore > 0.30 || ikhfaaScore > 0.30;
+
+        if (isCorrect) {
+          _correctAnswers++;
+          _score += 10;
+        }
+
+        _saveQuestionAnswer(
+          result: 'Mad: $madScore, Ghunnah: $ghunnahScore, Ikhfaa: $ikhfaaScore',
+          errorMessage: "",
+          userAnswer: fullPath,
+          isCorrect: isCorrect,
+        );
+        return;
+      } catch (e) {
+        attempt++;
+        if (attempt >= maxRetries) {
+          _saveQuestionAnswer(
+            result: "",
+            errorMessage: "❌ Evaluasi gagal setelah $attempt percobaan. Error: ${e.toString()}",
+            userAnswer: fullPath,
+            isCorrect: false,
+          );
+          notifyListeners();
+          break;
+        }
+        await Future.delayed(const Duration(seconds: 2));
+      }
+    }
+  }
+
+  void _saveQuestionAnswer({
+    required String result,
+    required String errorMessage,
+    required String userAnswer,
+    required bool isCorrect,
+  }) {
     _answers[_currentIndex] = TajwidAnswer2(
-      isCorrect: isCorrect,
+      result: result,
+      errorMessage: errorMessage,
       userAnswer: userAnswer,
+      isCorrect: isCorrect,
     );
-
-    _speech.stop();
-    notifyListeners();
   }
 
   void nextQuestion() {
@@ -162,7 +203,7 @@ class GameTajwid2ViewModel extends ChangeNotifier {
     _currentIndex = 0;
     _score = 0;
     _correctAnswers = 0;
-    isRecording = false;
+    _isRecording = false;
     isFinished = false;
     _answers.clear();
     notifyListeners();

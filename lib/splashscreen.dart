@@ -23,28 +23,26 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
 
   @override
   void initState() {
-    super.initState();
-    _model = SplashScreenModel();
+  super.initState();
+  _model = SplashScreenModel();
 
-    // Delay 3 detik lalu navigate
-    Future.delayed(const Duration(seconds: 5)).then((_) {
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid != null) {
-        if (uid == 'n03FsoL7cbalgNkeNAzd1I83zru1') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePageWidget()),
-          );
-        }
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginWidget(),
-          ),
-        );
-      }
-    });
-  }
+  Future.delayed(const Duration(seconds: 3)).then((_) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Navigate to HomePage regardless of UID
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageWidget()),
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginWidget()),
+      );
+    }
+  });
+}
+
 
   @override
   void dispose() {

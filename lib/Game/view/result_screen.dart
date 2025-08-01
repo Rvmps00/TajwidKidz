@@ -58,6 +58,29 @@ class _ResultScreenState extends State<ResultScreen> {
     }
   }
 
+  Future<void> _savePuzzleAchievement({
+  required String rewardId,
+  required String puzzleImagePath,
+}) async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    // Extract the image key from path, e.g., 'masjidil_haram' from '.../masjidil_haram.png'
+    final fileName = puzzleImagePath.split('/').last;
+    final imageKey = fileName.split('.').first;
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      'achievements': FieldValue.arrayUnion([rewardId]),
+      'achievements_data': {
+        imageKey: {
+          'completed': true,
+          'timestamp': FieldValue.serverTimestamp(),
+        }
+      }
+    }, SetOptions(merge: true));
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,9 +267,16 @@ class _ResultScreenState extends State<ResultScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (widget.gameName.toLowerCase().contains('tebak huruf')) {
                             if (widget.level.toString() == '1') {
+                              final rewardId = 'Masjidil Haram';
+                              final imagePath = 'assets/images/puzzle_modul/masjidil_haram.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -263,6 +293,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               );
                             } else if (widget.level.toString() == '2') {
+                              final rewardId = 'Masjid Nabawi';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_nabawi.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -271,7 +308,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                         gameName: widget.gameName,
                                         level: widget.level,
                                         puzzleKey: 'puzzle_solved_MasjidNabawi',
-                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_nabawi.jpeg',
+                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_nabawi.png',
                                         puzzleName: 'Masjid Nabawi',
                                         puzzleLevel: 'Level 2 : Tebak Huruf',
                                         puzzleDescription: 'Masjid Nabawi didirikan oleh Nabi Muhammad SAW pada tahun 622 M di kota Madinah setelah hijrah dari Mekkah. Masjid ini menjadi pusat kegiatan keagamaan dan sosial umat Islam serta tempat dimakamkannya Nabi Muhammad SAW.',
@@ -279,6 +316,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               );
                             } else if (widget.level.toString() == '3') {
+                              final rewardId = 'Dome of the Rock';
+                              final imagePath = 'assets/images/puzzle_modul/dome_of_the_rock.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -287,7 +331,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                         gameName: widget.gameName,
                                         level: widget.level,
                                         puzzleKey: 'puzzle_solved_domeOfTheRock',
-                                        puzzleImagePath: 'assets/images/puzzle_modul/dome_of_the_rock.jpeg',
+                                        puzzleImagePath: 'assets/images/puzzle_modul/dome_of_the_rock.png',
                                         puzzleName: 'Dome of the Rock',
                                         puzzleLevel: 'Level 3 : Tebak Huruf',
                                         puzzleDescription: 'Dome of the Rock dibangun pada tahun 691 M di Yerusalem oleh Khalifah Abdul Malik dari Dinasti Umayyah. Bangunan berkubah emas ini merupakan salah satu situs suci umat Islam karena diyakini sebagai tempat Nabi Muhammad SAW naik ke langit saat Isra Mi’raj.',
@@ -297,6 +341,13 @@ class _ResultScreenState extends State<ResultScreen> {
                             }
                           } else if (widget.gameName.toLowerCase().contains('susun huruf')) {
                             if (widget.level.toString() == '1') {
+                              final rewardId = 'Masjid Quba';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_quba.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -305,7 +356,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                         gameName: widget.gameName,
                                         level: widget.level,
                                         puzzleKey: 'puzzle_solved_masjidQuba',
-                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_quba.jpeg',
+                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_quba.png',
                                         puzzleName: 'Masjid Quba',
                                         puzzleLevel: 'Level 1 : Susun Huruf',
                                         puzzleDescription: 'Masjid Quba adalah masjid pertama yang dibangun oleh Nabi Muhammad SAW pada tahun 622 M di pinggiran kota Madinah. Masjid ini memiliki keutamaan karena pendiriannya dilandasi oleh takwa, dan shalat di dalamnya bernilai seperti umrah.',
@@ -313,6 +364,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               );
                             } else if (widget.level.toString() == '2') {
+                              final rewardId = 'Masjid Al-Azhar';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_al_azhar.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -321,7 +379,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                         gameName: widget.gameName,
                                         level: widget.level,
                                         puzzleKey: 'puzzle_solved_masjidAlAzhar',
-                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_al_azhar.jpeg',
+                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_al_azhar.png',
                                         puzzleName: 'Masjid Al-Azhar',
                                         puzzleLevel: 'Level 2 : Susun Huruf',
                                         puzzleDescription: 'Masjid Al-Azhar didirikan pada tahun 970 M di Kairo, Mesir, oleh Dinasti Fatimiyah. Selain sebagai tempat ibadah, masjid ini berkembang menjadi pusat pendidikan Islam terkemuka di dunia melalui Universitas Al-Azhar.',
@@ -329,6 +387,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               );
                             } else if (widget.level.toString() == '3') {
+                              final rewardId = 'Masjid Agung Cordoba';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_agung_cordoba.png';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -337,7 +402,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                         gameName: widget.gameName,
                                         level: widget.level,
                                         puzzleKey: 'puzzle_solved_masjidAgungCordoba',
-                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_agung_cordoba.jpeg',
+                                        puzzleImagePath: 'assets/images/puzzle_modul/masjid_agung_cordoba.png',
                                         puzzleName: 'Masjid Agung Cordoba',
                                         puzzleLevel: 'Level 3 : Susun Huruf',
                                         puzzleDescription: 'Masjid Agung Cordoba dibangun pada tahun 785 M di Cordoba, Spanyol, oleh Abd al-Rahman I dari Dinasti Umayyah. Masjid ini terkenal dengan arsitektur megah bergaya Moor dan kemudian diubah menjadi katedral setelah penaklukan Kristen.',
@@ -347,6 +412,13 @@ class _ResultScreenState extends State<ResultScreen> {
                             }
                           } else if (widget.gameName.toLowerCase().contains('tajwid')) {
                             if (widget.level.toString() == '1') {
+                              final rewardId = 'Masjid Sultan Ahmed';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_sultan_ahmed.jpeg';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -363,6 +435,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               );
                             } else if (widget.level.toString() == '2') {
+                              final rewardId = 'Masjid Sheikh Zayed';
+                              final imagePath = 'assets/images/puzzle_modul/masjid_sheikh_zayed.jpeg';
+
+                              await _savePuzzleAchievement(
+                                rewardId: rewardId,
+                                puzzleImagePath: imagePath,
+                              );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

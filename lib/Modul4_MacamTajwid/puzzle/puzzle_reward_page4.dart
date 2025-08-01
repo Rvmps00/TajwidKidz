@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:TajwidKidz/learning.dart';
 import 'package:TajwidKidz/Progress.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class PuzzlePiece {
   final int correctIndex;
@@ -30,7 +33,7 @@ class _PuzzleRewardPage4State extends State<PuzzleRewardPage4> {
   bool isLoading = true;
   int correctPiecesCount = 0;
   final String puzzleKey = 'puzzle_solved_MasjidAl-SalehSana`a';
-  final String puzzleImagePath = 'assets/images/puzzle_modul/Masjid Sana`a.jpg';
+  final String puzzleImagePath = 'assets/images/puzzle_modul/Masjid Sanaa.png';
   final String puzzleName = 'Masjid Al-Saleh Sana`a';
   final String puzzleLevel = 'Level 4 : Belajar Mengenal Tajwid';
   final String puzzleDescription =
@@ -132,18 +135,38 @@ class _PuzzleRewardPage4State extends State<PuzzleRewardPage4> {
   }
 
   void _checkIfSolved() async {
-    if (correctPiecesCount == pieces.length) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(puzzleKey, true);
-      setState(() => isSolved = true);
+  if (correctPiecesCount == pieces.length) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('puzzle_solved_Masjid Sanaa', true);
+    setState(() => isSolved = true);
 
-      await _victoryPlayer.play(AssetSource('audios/sounds/mixkit-correct-answer-reward-952.wav'));
+    // ✅ Simpan ke Firestore
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final rewardId = 'Masjid Sanaa';
 
-      Future.delayed(const Duration(milliseconds: 800), () {
-        if (mounted) _showSolvedDialog();
-      });
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'achievements': FieldValue.arrayUnion([rewardId]),
+        'achievements_data': {
+          rewardId: {
+            'completed': true,
+            'timestamp': FieldValue.serverTimestamp(),
+          }
+        }
+      }, SetOptions(merge: true));
     }
+
+
+    await _victoryPlayer.play(
+      AssetSource('audios/sounds/mixkit-correct-answer-reward-952.wav'),
+    );
+
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) _showSolvedDialog();
+    });
   }
+}
+
 
   void _showSolvedDialog() {
     showDialog(

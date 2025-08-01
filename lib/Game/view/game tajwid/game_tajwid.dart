@@ -35,9 +35,9 @@ class _GameTajwidState extends State<GameTajwid> {
       child: Scaffold(
         backgroundColor: const Color(0xFFAADBE9),
         appBar: AppBar(
-            title: Text('Mini Game'),
-            backgroundColor: Color(0xFF037A16),
-          ),
+          title: Text('Mini Game'),
+          backgroundColor: Color(0xFF037A16),
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -57,7 +57,6 @@ class _GameTajwidState extends State<GameTajwid> {
                     ),
                     child: Stack(
                       children: [
-                        // Back Button
                         Positioned(
                           top: 0,
                           left: 0,
@@ -96,7 +95,7 @@ class _GameTajwidState extends State<GameTajwid> {
                             ),
 
                             const SizedBox(height: 24),
-                            
+
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.all(20),
@@ -111,19 +110,39 @@ class _GameTajwidState extends State<GameTajwid> {
                                     textAlign: TextAlign.center,
                                     text: parseArabicWithHighlight(
                                       question.question,
-                                      highlightColor: Color(0xFFBFE5FC), // Warna highlight biru muda
+                                      highlightColor: Color(0xFFBFE5FC),
                                     ),
                                   ),
 
                                   const SizedBox(height: 24),
-                                  
+
+                                  if (currentQuestionAnswer != null &&
+                                    currentQuestionAnswer.result.isNotEmpty &&
+                                    currentQuestionAnswer.result != "⏳ Menilai bacaan kamu..." &&
+                                    currentQuestionAnswer.isCorrect != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    child: Text(
+                                      currentQuestionAnswer.isCorrect == true
+                                          ? "✅ Bacaan benar"
+                                          : "❌ Bacaan salah atau tidak dikenali",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: currentQuestionAnswer.isCorrect ? Colors.green : Colors.red,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 16),
+
                                   GestureDetector(
                                     onTap: (controller.isRecording ||
-                                    (currentQuestionAnswer != null && (currentQuestionAnswer.result.isNotEmpty)))
-                                    ? null
-                                    : () {
-                                      controller.startListening();
-                                    },
+                                            (currentQuestionAnswer != null && (currentQuestionAnswer.result.isNotEmpty)))
+                                        ? null
+                                        : () {
+                                            controller.startListening();
+                                          },
                                     child: Image.asset(
                                       (currentQuestionAnswer != null && currentQuestionAnswer.result.isNotEmpty)
                                           ? 'assets/images/icon_mic_disable.png'
@@ -134,7 +153,16 @@ class _GameTajwidState extends State<GameTajwid> {
                                   ),
 
                                   const SizedBox(height: 24),
-                                  
+
+                                  // if (currentQuestionAnswer != null)
+                                  //   Text(
+                                  //     "DEBUG: ${currentQuestionAnswer.isCorrect} ",
+                                  //     style: const TextStyle(
+                                  //       fontSize: 14,
+                                  //       color: Colors.grey,
+                                  //     ),
+                                  //   ),
+
                                   GestureDetector(
                                     onTap: () {
                                       _speak(question.audioPath);
@@ -171,7 +199,7 @@ class _GameTajwidState extends State<GameTajwid> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              
+
                             if (currentQuestionAnswer != null && currentQuestionAnswer.result.isNotEmpty && currentQuestionAnswer.result.contains("kurang"))
                               Container(
                                 width: double.infinity,
@@ -191,7 +219,7 @@ class _GameTajwidState extends State<GameTajwid> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              
+
                             if (currentQuestionAnswer != null && currentQuestionAnswer.errorMessage.isNotEmpty)
                               Container(
                                 width: double.infinity,
@@ -211,9 +239,9 @@ class _GameTajwidState extends State<GameTajwid> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                            
+
                             const SizedBox(height: 16),
-                            
+
                             SizedBox(
                               width: double.infinity,
                               height: 48,
@@ -238,7 +266,7 @@ class _GameTajwidState extends State<GameTajwid> {
                                                     MaterialPageRoute(builder: (_) => const GameTajwid()),
                                                   );
                                                 },
-                                                gameName: 'Game_Tajwid', 
+                                                gameName: 'Game_Tajwid',
                                                 level: 1,
                                               ),
                                             ),
@@ -266,7 +294,7 @@ class _GameTajwidState extends State<GameTajwid> {
                             ),
                           ],
                         ),
-                      ]
+                      ],
                     ),
                   ),
                 );
@@ -281,12 +309,10 @@ class _GameTajwidState extends State<GameTajwid> {
 
 TextSpan parseArabicWithHighlight(String text, {Color highlightColor = const Color(0xFFBFE5FC)}) {
   List<TextSpan> spans = [];
-
   final regex = RegExp(r"'(.*?)'");
   int currentIndex = 0;
 
   for (final match in regex.allMatches(text)) {
-    // Tambahkan teks sebelum highlight
     if (match.start > currentIndex) {
       spans.add(TextSpan(
         text: text.substring(currentIndex, match.start),

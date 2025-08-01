@@ -42,7 +42,6 @@ class _GameTajwid2State extends State<GameTajwid2> {
               color: Colors.white,
             ),
           ),
-          // 3. Buat AppBar juga transparan dan hilangkan shadow
           backgroundColor: Color(0xFF037A16),
           elevation: 0,
           centerTitle: true,
@@ -55,11 +54,10 @@ class _GameTajwid2State extends State<GameTajwid2> {
                 if (controller.questions.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+
                 final question = controller.currentQuestion;
                 final flutterTts = FlutterTts();
 
-                // Set callback untuk navigasi saat game selesai
                 controller.setOnGameFinished(() {
                   Navigator.pushReplacement(
                     context,
@@ -72,7 +70,7 @@ class _GameTajwid2State extends State<GameTajwid2> {
                           controller.resetGame();
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const GameTajwid2()));
                         },
-                        gameName: 'Game_Tajwid', 
+                        gameName: 'Game_Tajwid',
                         level: 2,
                       ),
                     ),
@@ -90,7 +88,6 @@ class _GameTajwid2State extends State<GameTajwid2> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Bagian atas (Soal)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -126,10 +123,10 @@ class _GameTajwid2State extends State<GameTajwid2> {
                                 _buildInteractionButton(
                                   iconPath: controller.isRecording
                                       ? 'assets/images/icon_mic_recording.png'
-                                      : (controller.isQuestionAnswered // PERBAIKAN DI SINI
+                                      : (controller.isQuestionAnswered
                                           ? 'assets/images/icon_mic_disable.png'
                                           : 'assets/images/icon_mic.png'),
-                                  onTap: controller.isQuestionAnswered || controller.isRecording // PERBAIKAN DI SINI
+                                  onTap: controller.isQuestionAnswered || controller.isRecording
                                       ? null
                                       : () => controller.startListening(),
                                 ),
@@ -137,8 +134,8 @@ class _GameTajwid2State extends State<GameTajwid2> {
                             ),
                           ],
                         ),
-                        
-                        // Bagian bawah (Feedback dan Tombol Lanjut)
+
+                        // Bagian bawah
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -148,10 +145,9 @@ class _GameTajwid2State extends State<GameTajwid2> {
                               width: double.infinity,
                               height: 48,
                               child: ElevatedButton(
-                                // onPressed: controller.isQuestionAnswered // PERBAIKAN DI SINI
-                                //     ? () => controller.nextQuestion()
-                                //     : null,
-                                onPressed: () { controller.nextQuestion(); },
+                                onPressed: () {
+                                  controller.nextQuestion();
+                                },
                                 child: const Text('Lanjut', style: TextStyle(fontSize: 16)),
                               ),
                             ),
@@ -177,12 +173,12 @@ class _GameTajwid2State extends State<GameTajwid2> {
   }
 
   Widget _buildFeedbackArea(GameTajwid2ViewModel controller) {
-    // PERBAIKAN: Gunakan `isQuestionAnswered` dan `currentAnswer`
-    if (!controller.isQuestionAnswered) {
-      return const SizedBox(height: 60); // Jaga ruang agar layout stabil
+    final answer = controller.currentAnswer;
+
+    if (!controller.isQuestionAnswered || answer == null || answer.isCorrect == null) {
+      return const SizedBox(height: 60);
     }
-    
-    final answer = controller.currentAnswer!;
+
     final question = controller.currentQuestion;
 
     return Container(
@@ -206,7 +202,6 @@ class _GameTajwid2State extends State<GameTajwid2> {
   }
 }
 
-// Pastikan helper ini ada di file terpisah atau di file yang sama
 TextSpan parseArabicWithHighlight(String text, {Color highlightColor = Colors.cyan}) {
   List<TextSpan> spans = [];
   final regex = RegExp(r'"(.*?)"');
