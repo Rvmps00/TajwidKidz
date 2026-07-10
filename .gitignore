@@ -43,3 +43,48 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase config
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Credential and secret files
+*.jks
+*.keystore
+key.properties
+.env
+
+# Generated files
+.dart_tool/
+.packages
+.pub-cache/
+.build/
+
+# Flutter build
+/build/
+**/ios/Flutter/.last_build_id
+
+# Xcode
+DerivedData/
+*.xcworkspace
+!ios/Runner.xcworkspace
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code recommended local settings
+.vscode/
+
+# Logs
+*.log
+
+# Misc
+*.class
+*.pyc
+*.swp
